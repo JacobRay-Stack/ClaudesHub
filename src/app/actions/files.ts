@@ -88,11 +88,9 @@ export async function deleteResourceFile(fileId: string) {
 export async function trackDownload(fileId: string) {
   const supabase = await createServerClient();
 
-  await supabase.rpc("increment_download_count", { file_id: fileId }).catch(() => {
-    // Fallback: direct update if RPC doesn't exist yet
-    supabase
-      .from("resource_files")
-      .update({ download_count: supabase.rpc ? undefined : 0 })
-      .eq("id", fileId);
-  });
+  try {
+    await supabase.rpc("increment_download_count", { file_id: fileId });
+  } catch {
+    // RPC doesn't exist yet -- skip tracking
+  }
 }
