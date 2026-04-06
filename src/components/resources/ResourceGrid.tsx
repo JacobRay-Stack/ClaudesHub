@@ -13,7 +13,7 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
     return (
       <EmptyState
         title="No resources found"
-        description="Be the first to share a skill, SOP, or template with the community."
+        description="Be the first to share a skill, config, or guide with the community."
         action={
           <Link href="/resources/new">
             <Button>Submit a Resource</Button>

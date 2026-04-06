@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #e5e5e5;
-  --muted: #a3a3a3;
-  --border: #262626;
-  --card: #141414;
-  --card-hover: #1a1a1a;
-  --accent: #c084fc;
-  --accent-dim: #7c3aed;
-  --success: #34d399;
-  --danger: #f87171;
-  --input-bg: #1a1a1a;
+  --background: #07080A;
+  --foreground: #E8E6E3;
+  --muted: #7D7A75;
+  --border: #1C1E24;
+  --card: #0E1014;
+  --card-hover: #14161C;
+  --accent: #D4A853;
+  --accent-dim: #9E7B38;
+  --success: #4ADE80;
+  --danger: #EF6B6B;
+  --input-bg: #111318;
+  --type-config: #60A5FA;
+  --type-mcp: #A78BFA;
+  --type-guide: #FB923C;
+  --type-prompt: #F472B6;
 }
 
 @theme inline {
@@ -26,8 +30,38 @@
   --color-success: var(--success);
   --color-danger: var(--danger);
   --color-input-bg: var(--input-bg);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-type-config: var(--type-config);
+  --color-type-mcp: var(--type-mcp);
+  --color-type-guide: var(--type-guide);
+  --color-type-prompt: var(--type-prompt);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-jetbrains);
+  --font-display: var(--font-syne);
+
+  --animate-fade-in-up: fade-in-up 0.5s ease-out both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 
 body {
@@ -36,16 +70,61 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Dot grid pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Ambient glow effect */
+.hero-glow {
+  position: absolute;
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(212, 168, 83, 0.12), transparent 70%);
+  top: 40%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: blur(60px);
+}
+
+/* Card hover glow */
+.card-interactive {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.2s ease;
+}
+.card-interactive:hover {
+  border-color: rgba(212, 168, 83, 0.15);
+  box-shadow: 0 4px 24px rgba(212, 168, 83, 0.06), 0 0 0 1px rgba(212, 168, 83, 0.05);
+}
+
+/* Stagger animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 4px;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Header gradient line */
+.header-line {
+  background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+  height: 1px;
+  opacity: 0.5;
 }
 
 /* Markdown content styles */
@@ -55,7 +134,8 @@ body {
 }
 .prose h1, .prose h2, .prose h3, .prose h4 {
   color: var(--foreground);
-  font-weight: 600;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
 }
@@ -67,8 +147,9 @@ body {
   background: var(--card);
   padding: 0.15em 0.4em;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 0.875em;
   font-family: var(--font-mono), monospace;
+  color: var(--accent);
 }
 .prose pre {
   background: var(--card);
@@ -81,10 +162,15 @@ body {
 .prose pre code {
   background: none;
   padding: 0;
+  color: var(--foreground);
 }
 .prose a {
   color: var(--accent);
   text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose a:hover {
+  color: var(--foreground);
 }
 .prose ul, .prose ol {
   padding-left: 1.5em;
@@ -98,4 +184,5 @@ body {
   padding-left: 1em;
   color: var(--muted);
   margin: 1em 0;
+  font-style: italic;
 }

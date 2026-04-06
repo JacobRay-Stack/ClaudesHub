@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Resources",
-  description: "Browse Claude Code skills, SOPs, MCP servers, and templates",
+  description: "Browse Claude Code skills, configs, MCP servers, hooks, guides, and prompts",
 };
 
 interface PageProps {

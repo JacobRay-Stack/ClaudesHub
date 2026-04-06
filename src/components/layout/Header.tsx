@@ -6,14 +6,17 @@ export async function Header() {
   const user = await getUser();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md">
       <div className="mx-auto max-w-6xl flex items-center justify-between px-4 h-14">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-            <span className="text-accent">Claude</span>
-            <span className="text-foreground">sHub</span>
+        <div className="flex items-center gap-8">
+          <Link
+            href="/"
+            className="flex items-center gap-0.5 font-display text-lg tracking-tight"
+          >
+            <span className="text-accent font-bold">Claudes</span>
+            <span className="text-foreground font-bold">Hub</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-4 text-sm">
+          <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link
               href="/resources"
               className="text-muted hover:text-foreground transition-colors"
@@ -25,6 +28,24 @@ export async function Header() {
               className="text-muted hover:text-foreground transition-colors"
             >
               Discussions
+            </Link>
+            <Link
+              href="/learn"
+              className="text-muted hover:text-foreground transition-colors"
+            >
+              Learn
+            </Link>
+            <Link
+              href="/vibe-coders"
+              className="text-muted hover:text-foreground transition-colors"
+            >
+              Vibe Coders
+            </Link>
+            <Link
+              href="/tags"
+              className="text-muted hover:text-foreground transition-colors"
+            >
+              Tags
             </Link>
           </nav>
         </div>
@@ -41,7 +62,7 @@ export async function Header() {
               </Link>
               <Link
                 href="/signup"
-                className="text-sm bg-accent text-black px-3 py-1.5 rounded-lg font-medium hover:bg-accent/90 transition-colors"
+                className="text-sm bg-accent text-black px-4 py-1.5 rounded-lg font-medium hover:bg-accent/90 transition-colors"
               >
                 Sign up
               </Link>
@@ -49,6 +70,7 @@ export async function Header() {
           )}
         </div>
       </div>
+      <div className="header-line" />
     </header>
   );
 }

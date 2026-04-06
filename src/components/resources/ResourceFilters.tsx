@@ -3,12 +3,17 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs } from "@/components/ui/Tabs";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { SORT_OPTIONS } from "@/lib/constants";
+import { SORT_OPTIONS, RESOURCE_TYPES } from "@/lib/constants";
 import type { Category } from "@/lib/types";
 
 interface ResourceFiltersProps {
   categories: Category[];
 }
+
+const typeTabs = [
+  { value: "", label: "All" },
+  ...RESOURCE_TYPES.map((t) => ({ value: t.value, label: t.label })),
+];
 
 export function ResourceFilters({ categories }: ResourceFiltersProps) {
   const router = useRouter();
@@ -17,6 +22,7 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
   const sort = searchParams.get("sort") || "hot";
   const query = searchParams.get("q") || "";
   const category = searchParams.get("category") || "";
+  const type = searchParams.get("type") || "";
 
   function updateParams(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -35,7 +41,7 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex flex-col sm:flex-row gap-3">
         <SearchInput
           value={query}
@@ -49,6 +55,25 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
           onChange={(v) => updateParams("sort", v)}
         />
       </div>
+
+      {/* Type filter (primary) */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        {typeTabs.map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => updateParams("type", tab.value)}
+            className={`whitespace-nowrap px-3 py-1.5 text-sm rounded-full border transition-colors cursor-pointer ${
+              type === tab.value
+                ? "bg-accent text-black border-accent font-medium"
+                : "border-border text-muted hover:text-foreground hover:border-foreground/20"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Category filter (secondary) */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
         {categoryTabs.map((tab) => (
           <button
@@ -56,7 +81,7 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
             onClick={() => updateParams("category", tab.value)}
             className={`whitespace-nowrap px-3 py-1.5 text-sm rounded-full border transition-colors cursor-pointer ${
               category === tab.value
-                ? "bg-accent text-black border-accent font-medium"
+                ? "bg-card-hover text-foreground border-foreground/20 font-medium"
                 : "border-border text-muted hover:text-foreground hover:border-foreground/20"
             }`}
           >

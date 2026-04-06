@@ -1,4 +1,11 @@
-export type ResourceType = "skill" | "sop" | "mcp-server" | "reference" | "template";
+export type ResourceType = "skill" | "claude-config" | "mcp-server" | "hook" | "guide" | "prompt";
+
+export const ARTIFACT_TYPES: ResourceType[] = ["skill", "claude-config", "mcp-server", "hook"];
+export const CONTENT_TYPES: ResourceType[] = ["guide", "prompt"];
+
+export function isArtifactType(type: ResourceType): boolean {
+  return ARTIFACT_TYPES.includes(type);
+}
 
 export interface Profile {
   id: string;
@@ -31,11 +38,25 @@ export interface Resource {
   tags: string[];
   upvote_count: number;
   comment_count: number;
+  download_count: number;
+  is_staff_pick: boolean;
   created_at: string;
   updated_at: string;
   // Joined fields
   author?: Profile;
   category?: Category;
+  files?: ResourceFile[];
+}
+
+export interface ResourceFile {
+  id: string;
+  resource_id: string;
+  file_name: string;
+  file_size: number;
+  storage_path: string;
+  content_type: string | null;
+  download_count: number;
+  created_at: string;
 }
 
 export interface Discussion {

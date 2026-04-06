@@ -12,7 +12,7 @@ export function DiscussionCard({ discussion }: DiscussionCardProps) {
   return (
     <Link
       href={`/discussions/${discussion.slug}`}
-      className="flex items-start gap-4 rounded-lg border border-border bg-card hover:bg-card-hover transition-colors p-4"
+      className="card-interactive flex items-start gap-4 rounded-lg border border-border bg-card hover:bg-card-hover p-4"
     >
       <div className="flex flex-col items-center text-sm shrink-0 min-w-[40px]">
         <svg

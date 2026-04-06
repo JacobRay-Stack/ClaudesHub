@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { createResource, updateResource } from "@/app/actions/resources";
 import { RESOURCE_TYPES } from "@/lib/constants";
-import type { Category, Resource } from "@/lib/types";
+import { RESOURCE_TEMPLATES } from "@/lib/resource-templates";
+import type { Category, Resource, ResourceType } from "@/lib/types";
 
 interface ResourceFormProps {
   categories: Category[];
@@ -16,7 +17,29 @@ interface ResourceFormProps {
 export function ResourceForm({ categories, resource }: ResourceFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resourceType, setResourceType] = useState<ResourceType>(
+    resource?.resource_type || "skill"
+  );
+  const contentRef = useRef<HTMLTextAreaElement>(null);
   const isEditing = !!resource;
+
+  // Track whether the user has typed custom content
+  const isTemplateContent = (content: string) => {
+    return Object.values(RESOURCE_TEMPLATES).some(
+      (t) => t.trim() === content.trim()
+    );
+  };
+
+  function handleTypeChange(newType: ResourceType) {
+    setResourceType(newType);
+    if (!isEditing && contentRef.current) {
+      const current = contentRef.current.value;
+      // Only replace content if it's empty or still a template
+      if (!current.trim() || isTemplateContent(current)) {
+        contentRef.current.value = RESOURCE_TEMPLATES[newType];
+      }
+    }
+  }
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
@@ -63,7 +86,10 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
           <select
             id="resource_type"
             name="resource_type"
-            defaultValue={resource?.resource_type || "skill"}
+            value={resourceType}
+            onChange={(e) =>
+              handleTypeChange(e.target.value as ResourceType)
+            }
             className="w-full rounded-lg border border-border bg-input-bg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
           >
             {RESOURCE_TYPES.map((t) => (
@@ -99,7 +125,11 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
         name="content"
         label="Content (Markdown supported)"
         placeholder="Paste the skill code, SOP steps, or reference content here..."
-        defaultValue={resource?.content || ""}
+        defaultValue={
+          resource?.content ||
+          RESOURCE_TEMPLATES[resourceType]
+        }
+        ref={contentRef}
         className="min-h-[300px] font-mono text-sm"
         required
       />

@@ -11,7 +11,7 @@ const resourceSchema = z.object({
   title: z.string().min(3).max(200),
   description: z.string().max(500).optional(),
   content: z.string().min(10),
-  resource_type: z.enum(["skill", "sop", "mcp-server", "reference", "template"]),
+  resource_type: z.enum(["skill", "claude-config", "mcp-server", "hook", "guide", "prompt"]),
   category_id: z.coerce.number().int().positive(),
   tags: z.string().optional(),
 });
