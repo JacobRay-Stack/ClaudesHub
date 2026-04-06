@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Concept D: Warm Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1C1917;
+    --surface: #231F1C;
+    --surface-2: #2C2723;
+    --fg: #F5F0EB;
+    --muted: #A8A094;
+    --border: #3D362F;
+    --accent: #E89B4C;
+    --accent-light: rgba(232,155,76,0.1);
+    --accent-dark: #C47A2E;
+    --cream: #F5F0EB;
+    --sage: #8CB88A;
+    --blue: #7EB8D8;
+    --rose: #D4878F;
+  }
+
+  body { background: var(--bg); color: var(--fg); font-family: 'DM Sans', sans-serif; line-height: 1.6; }
+
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 18px 0; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(28,25,23,0.92); backdrop-filter: blur(16px);
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; font-size: 0.85rem; }
+  .nav-links a { color: var(--muted); text-decoration: none; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-login { color: var(--muted); font-size: 0.85rem; text-decoration: none; }
+  .nav-cta {
+    background: var(--accent); color: var(--bg); padding: 8px 18px; border-radius: 8px;
+    font-size: 0.8rem; font-weight: 600; text-decoration: none;
+  }
+
+  /* HERO */
+  .hero { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-light), transparent 70%);
+    filter: blur(60px); pointer-events: none;
+  }
+  .hero .container { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif; font-size: 3.5rem; font-weight: 400;
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p { font-size: 1.05rem; color: var(--muted); margin-bottom: 32px; line-height: 1.7; }
+  .hero-actions { display: flex; gap: 12px; }
+  .btn-warm {
+    background: var(--accent); color: var(--bg); padding: 14px 28px; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  }
+  .btn-warm:hover { background: var(--accent-dark); }
+  .btn-outline {
+    border: 1.5px solid var(--border); color: var(--fg); padding: 14px 28px;
+    border-radius: 10px; font-size: 0.9rem; font-weight: 500; text-decoration: none;
+  }
+  .btn-outline:hover { border-color: var(--accent); }
+
+  /* HERO FEATURE CARD */
+  .hero-feature {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; position: relative;
+  }
+  .hero-feature::before {
+    content: 'Featured'; position: absolute; top: -10px; left: 20px;
+    background: var(--accent); color: var(--bg); font-size: 0.65rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .hero-feature .badges { display: flex; gap: 6px; margin-bottom: 12px; margin-top: 4px; }
+  .badge {
+    font-size: 0.65rem; font-weight: 600; padding: 3px 10px; border-radius: 6px;
+  }
+  .badge-mcp { background: rgba(126,184,216,0.15); color: var(--blue); }
+  .badge-skill { background: rgba(232,155,76,0.15); color: var(--accent); }
+  .badge-config { background: rgba(126,184,216,0.15); color: var(--blue); }
+  .badge-hook { background: rgba(140,184,138,0.15); color: var(--sage); }
+  .badge-guide { background: rgba(232,155,76,0.15); color: var(--accent); }
+  .badge-prompt { background: rgba(212,135,143,0.15); color: var(--rose); }
+  .badge-pick { background: rgba(140,184,138,0.15); color: var(--sage); }
+
+  .hero-feature h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 8px; }
+  .hero-feature p { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+  .hero-feature-stats { display: flex; gap: 20px; font-size: 0.8rem; color: var(--muted); }
+  .hero-feature-stats strong { color: var(--accent); }
+
+  .hero-feature-code {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted);
+    line-height: 1.6; overflow-x: auto;
+  }
+  .hero-feature-code .key { color: var(--blue); }
+  .hero-feature-code .str { color: var(--sage); }
+
+  /* SECTION */
+  .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; }
+  .section-link { color: var(--accent); font-size: 0.8rem; text-decoration: none; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; text-decoration: none; color: inherit; transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--accent); background: var(--surface-2); }
+  .card .badges { display: flex; gap: 6px; margin-bottom: 10px; }
+  .card h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 6px; }
+  .card p { font-size: 0.8rem; color: var(--muted); }
+  .card-meta { display: flex; gap: 12px; margin-top: 12px; font-size: 0.7rem; color: var(--muted); }
+
+  /* DISCUSSIONS */
+  .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; }
+  .disc-list { border-top: 1px solid var(--border); }
+  .disc-item {
+    display: flex; gap: 16px; padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .disc-item:hover .disc-title { color: var(--accent); }
+  .disc-votes {
+    font-family: 'DM Serif Display', serif; font-size: 1.2rem;
+    color: var(--accent); min-width: 36px; text-align: center;
+  }
+  .disc-title { font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .disc-meta { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+  /* QUOTE */
+  .quote-section { padding: 48px 0; text-align: center; }
+  .quote {
+    font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-style: italic;
+    color: var(--fg); max-width: 600px; margin: 0 auto 12px; line-height: 1.4;
+  }
+  .quote-author { font-size: 0.8rem; color: var(--muted); }
+
+  /* FOOTER */
+  footer { padding: 32px 0; }
+  footer .container { display: flex; justify-content: space-between; align-items: center; }
+  footer .logo { font-size: 1.1rem; }
+  footer nav { display: flex; gap: 20px; font-size: 0.8rem; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <div class="nav-links">
+      <a href="#">Resources</a>
+      <a href="#">Discussions</a>
+      <a href="#">About</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="nav-login">Log in</a>
+      <a href="#" class="nav-cta">Sign up</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div>
+      <h1>The place builders go to find what <em>actually works</em></h1>
+      <p>Claude Code skills, configs, hooks, and MCP servers — shared by the people who build with them every day. Real reviews. Real downloads. No guessing.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-warm">Browse Resources</a>
+        <a href="#" class="btn-outline">Share Something</a>
+      </div>
+    </div>
+    <div class="hero-feature">
+      <div class="badges"><span class="badge badge-pick">Staff Pick</span><span class="badge badge-mcp">MCP Server</span></div>
+      <h3>Supabase — Full Database Access</h3>
+      <p>Connect Claude directly to your Supabase project. Query, migrate, manage.</p>
+      <div class="hero-feature-stats">
+        <span><strong>89</strong> upvotes</span>
+        <span><strong>1,204</strong> downloads</span>
+        <span><strong>23</strong> comments</span>
+      </div>
+      <div class="hero-feature-code">
+        {<br>
+        &nbsp;&nbsp;<span class="key">"mcpServers"</span>: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"supabase"</span>: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"command"</span>: <span class="str">"npx"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@supabase/mcp-server"</span>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Staff Picks</div>
+    </div>
+    <div class="card-grid">
+      <a href="#" class="card">
+        <div class="badges"><span class="badge badge-skill">Skill</span></div>
+        <h3>Git Commit Generator</h3>
+        <p>Analyzes staged changes, writes conventional commits.</p>
+        <div class="card-meta"><span>47 upvotes</span><span>312 dl</span></div>
+      </a>
+      <a href="#" class="card">
+        <div class="badges"><span class="badge badge-config">CLAUDE.md</span></div>
+        <h3>Next.js + Supabase Config</h3>
+        <p>Battle-tested project configuration file.</p>
+        <div class="card-meta"><span>63 upvotes</span><span>489 dl</span></div>
+      </a>
+      <a href="#" class="card">
+        <div class="badges"><span class="badge badge-guide">Guide</span></div>
+        <h3>Multi-Agent Workflows</h3>
+        <p>Parallelize work across multiple Claude instances.</p>
+        <div class="card-meta"><span>55 upvotes</span><span>14 comments</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="quote-section" style="border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="quote">"I found the exact MCP config I needed in 30 seconds instead of spending an hour on GitHub."</div>
+    <div class="quote-author">— Community member</div>
+  </div>
+</div>
+
+<section class="section" style="border-bottom: none;">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <div class="section-title">Trending</div>
+          <a href="#" class="section-link">View all →</a>
+        </div>
+        <a href="#" class="card" style="margin-bottom:12px;">
+          <div class="badges"><span class="badge badge-hook">Hook</span></div>
+          <h3>Auto-Format Files on Save</h3>
+          <p>Prettier runs automatically on every file Claude touches.</p>
+          <div class="card-meta"><span>31 upvotes</span><span>156 dl</span></div>
+        </a>
+        <a href="#" class="card" style="margin-bottom:12px;">
+          <div class="badges"><span class="badge badge-prompt">Prompt</span></div>
+          <h3>SQL Query Builder</h3>
+          <p>Natural language to optimized PostgreSQL.</p>
+          <div class="card-meta"><span>28 upvotes</span><span>6 comments</span></div>
+        </a>
+        <a href="#" class="card">
+          <div class="badges"><span class="badge badge-skill">Skill</span></div>
+          <h3>PR Review Checklist</h3>
+          <p>Generates a thorough review checklist from any PR diff.</p>
+          <div class="card-meta"><span>42 upvotes</span><span>198 dl</span></div>
+        </a>
+      </div>
+      <div>
+        <div class="section-header">
+          <div class="section-title">Discussions</div>
+          <a href="#" class="section-link">View all →</a>
+        </div>
+        <div class="disc-list">
+          <a href="#" class="disc-item">
+            <div class="disc-votes">34</div>
+            <div><div class="disc-title">What's your CLAUDE.md look like?</div><div class="disc-meta">12 comments</div></div>
+          </a>
+          <a href="#" class="disc-item">
+            <div class="disc-votes">28</div>
+            <div><div class="disc-title">Best MCP servers you use daily?</div><div class="disc-meta">19 comments</div></div>
+          </a>
+          <a href="#" class="disc-item">
+            <div class="disc-votes">21</div>
+            <div><div class="disc-title">Rate limit strategies?</div><div class="disc-meta">8 comments</div></div>
+          </a>
+          <a href="#" class="disc-item">
+            <div class="disc-votes">19</div>
+            <div><div class="disc-title">Claude Code vs Cursor?</div><div class="disc-meta">24 comments</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <nav>
+      <a href="#">Resources</a>
+      <a href="#">Discussions</a>
+      <a href="#">About</a>
+      <a href="#">Guidelines</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

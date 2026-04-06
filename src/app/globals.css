@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07080A;
-  --foreground: #E8E6E3;
-  --muted: #7D7A75;
-  --border: #1C1E24;
-  --card: #0E1014;
-  --card-hover: #14161C;
-  --accent: #D4A853;
-  --accent-dim: #9E7B38;
-  --success: #4ADE80;
-  --danger: #EF6B6B;
-  --input-bg: #111318;
+  --background: #0D1117;
+  --foreground: #E6EDF3;
+  --muted: #8B949E;
+  --border: #21262D;
+  --card: #161B22;
+  --card-hover: #1C2129;
+  --accent: #3FB950;
+  --accent-dim: #2EA043;
+  --success: #3FB950;
+  --danger: #F85149;
+  --input-bg: #0D1117;
   --type-config: #60A5FA;
   --type-mcp: #A78BFA;
   --type-guide: #FB923C;
@@ -81,7 +81,7 @@ body {
   position: absolute;
   width: 700px;
   height: 400px;
-  background: radial-gradient(ellipse, rgba(212, 168, 83, 0.12), transparent 70%);
+  background: radial-gradient(ellipse, rgba(63, 185, 80, 0.10), transparent 70%);
   top: 40%;
   left: 30%;
   transform: translate(-50%, -50%);
@@ -94,8 +94,8 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.2s ease;
 }
 .card-interactive:hover {
-  border-color: rgba(212, 168, 83, 0.15);
-  box-shadow: 0 4px 24px rgba(212, 168, 83, 0.06), 0 0 0 1px rgba(212, 168, 83, 0.05);
+  border-color: rgba(63, 185, 80, 0.15);
+  box-shadow: 0 4px 24px rgba(63, 185, 80, 0.06), 0 0 0 1px rgba(63, 185, 80, 0.05);
 }
 
 /* Stagger animation delays */

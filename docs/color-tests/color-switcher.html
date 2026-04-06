@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Color Scheme Tester</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #151719;
+    --fg: #EDEDEC;
+    --muted: #8A8884;
+    --border: #282B33;
+    --card: #1C1F24;
+    --card-hover: #24272E;
+    --accent: #D4A853;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  a { color: var(--fg); text-decoration: none; }
+
+  /* ===== COLOR SWITCHER BAR ===== */
+  .switcher {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: #000; padding: 10px 20px;
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #333;
+  }
+  .switcher-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: #888; margin-right: 8px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .swatch {
+    width: 32px; height: 32px;
+    border-radius: 6px; cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .swatch:hover { transform: scale(1.1); }
+  .swatch.active { border-color: white; box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
+  .scheme-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: #ccc; margin-left: 8px;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .page { padding-top: 60px; }
+
+  .topnav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 52px; z-index: 100;
+    height: 52px;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .topnav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 16px;
+    display: flex; align-items: center; height: 100%; gap: 16px;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; flex-shrink: 0; }
+  .logo span { color: var(--accent); }
+  .search-bar { flex: 1; max-width: 400px; }
+  .search-bar input {
+    width: 100%; padding: 7px 12px 7px 34px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.8rem; background: var(--card); color: var(--fg);
+    outline: none; transition: all 0.3s;
+  }
+  .search-bar input:focus { border-color: var(--accent); }
+  .nav-right { display: flex; gap: 8px; margin-left: auto; }
+  .btn-login { color: var(--muted); font-size: 0.8rem; padding: 6px 12px; }
+  .btn-signup {
+    background: var(--accent); color: var(--bg); padding: 6px 14px;
+    border-radius: 7px; font-size: 0.8rem; font-weight: 600;
+  }
+
+  .layout {
+    max-width: 1200px; margin: 0 auto; padding: 12px 16px;
+    display: grid; grid-template-columns: 200px 1fr 280px; gap: 14px; align-items: start;
+  }
+
+  /* SIDEBAR LEFT */
+  .sidebar-left { position: sticky; top: 116px; }
+  .sidebar-left a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; border-radius: 7px; font-size: 0.8rem;
+    color: var(--muted); transition: all 0.15s;
+  }
+  .sidebar-left a:hover { background: var(--card); color: var(--fg); }
+  .sidebar-left svg { width: 16px; height: 16px; }
+  .sidebar-left .count { margin-left: auto; font-size: 0.7rem; }
+  .sidebar-left h3 {
+    font-size: 0.65rem; font-weight: 700; color: var(--fg);
+    padding: 0 10px; margin: 16px 0 6px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .sidebar-left .tag-link { font-size: 0.75rem; padding: 3px 10px; }
+
+  /* FEED */
+  .feed-tabs { display: flex; gap: 2px; margin-bottom: 10px; }
+  .feed-tabs a {
+    padding: 6px 12px; border-radius: 7px; font-size: 0.8rem;
+    font-weight: 500; color: var(--muted);
+  }
+  .feed-tabs a.active { color: var(--fg); font-weight: 700; }
+  .feed-tabs a:hover { background: var(--card); }
+
+  .post-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; margin-bottom: 6px;
+    transition: all 0.3s;
+  }
+  .post-card:hover { border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
+  .post-author { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 15%, var(--card));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; font-weight: 700; color: var(--accent);
+  }
+  .author-name { font-size: 0.75rem; font-weight: 500; }
+  .post-date { font-size: 0.65rem; color: var(--muted); }
+  .post-card h2 {
+    font-family: 'Syne', sans-serif; font-size: 1.1rem;
+    font-weight: 700; line-height: 1.3; margin-bottom: 4px;
+  }
+  .post-card h2:hover { color: var(--accent); }
+  .post-tags { display: flex; gap: 3px; margin-bottom: 8px; flex-wrap: wrap; }
+  .post-tag { font-size: 0.65rem; color: var(--muted); padding: 2px 6px; border-radius: 4px; }
+  .post-tag:hover { background: var(--bg); }
+  .type-badge {
+    font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.02em;
+  }
+  .tb-skill { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+  .tb-config { background: rgba(96,165,250,0.12); color: #60A5FA; }
+  .tb-mcp { background: rgba(167,139,250,0.12); color: #A78BFA; }
+  .tb-hook { background: rgba(74,222,128,0.12); color: #4ADE80; }
+  .tb-guide { background: rgba(251,146,60,0.12); color: #FB923C; }
+  .tb-prompt { background: rgba(244,114,182,0.12); color: #F472B6; }
+  .tb-pick { background: rgba(74,222,128,0.12); color: #4ADE80; }
+  .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .reactions { display: flex; gap: 4px; }
+  .reaction {
+    font-size: 0.75rem; color: var(--muted); padding: 3px 8px;
+    border-radius: 6px; cursor: pointer; background: none; border: none;
+    font-family: inherit;
+  }
+  .reaction:hover { background: var(--bg); color: var(--fg); }
+  .post-meta-r { font-size: 0.65rem; color: var(--muted); display: flex; gap: 10px; }
+
+  /* SIDEBAR RIGHT */
+  .sidebar-right { position: sticky; top: 116px; }
+  .cta-box {
+    background: var(--accent); border-radius: 10px;
+    padding: 18px; text-align: center; margin-bottom: 10px;
+  }
+  .cta-box h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--bg); }
+  .cta-box p { font-size: 0.7rem; color: var(--bg); opacity: 0.75; margin: 4px 0 10px; }
+  .cta-box a {
+    display: inline-block; background: var(--bg); color: var(--accent);
+    padding: 6px 16px; border-radius: 7px; font-size: 0.75rem; font-weight: 700;
+  }
+  .sidebar-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; margin-bottom: 10px;
+    transition: all 0.3s;
+  }
+  .sidebar-box-header {
+    padding: 10px 14px; font-weight: 700; font-size: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-row {
+    display: flex; justify-content: space-around; padding: 10px 14px; text-align: center;
+  }
+  .stat-num { font-size: 1rem; font-weight: 800; }
+  .stat-label { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .disc-item {
+    display: flex; gap: 8px; padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .disc-item:last-child { border-bottom: none; }
+  .disc-item:hover { background: var(--card-hover); }
+  .disc-votes { font-size: 0.8rem; font-weight: 700; color: var(--accent); min-width: 22px; text-align: center; }
+  .disc-title { font-size: 0.72rem; font-weight: 500; line-height: 1.3; }
+  .disc-meta { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- COLOR SWITCHER -->
+<div class="switcher">
+  <span class="switcher-label">Scheme:</span>
+  <div class="swatch active" onclick="setScheme(0)" style="background:linear-gradient(135deg,#151719,#D4A853)" title="Current (Amber Dark)"></div>
+  <div class="swatch" onclick="setScheme(1)" style="background:linear-gradient(135deg,#F5F5F5,#3B49DF)" title="Light Blue (DEV.to)"></div>
+  <div class="swatch" onclick="setScheme(2)" style="background:linear-gradient(135deg,#FAFAF8,#2D2A26)" title="Warm Cream"></div>
+  <div class="swatch" onclick="setScheme(3)" style="background:linear-gradient(135deg,#0F172A,#38BDF8)" title="Midnight Sky"></div>
+  <div class="swatch" onclick="setScheme(4)" style="background:linear-gradient(135deg,#1A1A2E,#E94560)" title="Neon Coral"></div>
+  <div class="swatch" onclick="setScheme(5)" style="background:linear-gradient(135deg,#0A0E14,#3FB950)" title="GitHub Dark"></div>
+  <div class="swatch" onclick="setScheme(6)" style="background:linear-gradient(135deg,#F9FAFB,#111827)" title="Clean Gray"></div>
+  <div class="swatch" onclick="setScheme(7)" style="background:linear-gradient(135deg,#1C1917,#E89B4C)" title="Leather Warm"></div>
+  <span class="scheme-name" id="scheme-name">Current (Amber Dark)</span>
+</div>
+
+<div class="page">
+
+<!-- NAV -->
+<header class="topnav">
+  <div class="topnav-inner">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search skills, configs, MCP servers...">
+    </div>
+    <div class="nav-right">
+      <a class="btn-login">Log in</a>
+      <a class="btn-signup">Sign up</a>
+    </div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT -->
+  <aside class="sidebar-left">
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Skills <span class="count">82</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> CLAUDE.md <span class="count">41</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> MCP Servers <span class="count">56</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Hooks <span class="count">28</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg> Guides <span class="count">31</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Prompts <span class="count">10</span></a>
+
+    <h3>Popular Tags</h3>
+    <a href="#" class="tag-link">#claude-code</a>
+    <a href="#" class="tag-link">#mcp</a>
+    <a href="#" class="tag-link">#nextjs</a>
+    <a href="#" class="tag-link">#python</a>
+    <a href="#" class="tag-link">#git</a>
+    <a href="#" class="tag-link">#automation</a>
+    <a href="#" class="tag-link">#supabase</a>
+    <a href="#" class="tag-link">#typescript</a>
+  </aside>
+
+  <!-- FEED -->
+  <main>
+    <div class="feed-tabs">
+      <a class="active">Trending</a>
+      <a>Latest</a>
+      <a>Top</a>
+    </div>
+
+    <article class="post-card">
+      <div class="post-author">
+        <div class="avatar">JR</div>
+        <div><div class="author-name">jacobray</div><div class="post-date">Apr 4</div></div>
+      </div>
+      <h2>Supabase MCP Server — Full Database Access for Claude Code</h2>
+      <div class="post-tags"><span class="post-tag">#mcp</span><span class="post-tag">#supabase</span><span class="post-tag">#sql</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;"><span class="type-badge tb-pick">Staff Pick</span><span class="type-badge tb-mcp">MCP Server</span></div>
+      <div class="post-actions">
+        <div class="reactions"><button class="reaction">👍 89</button><button class="reaction">🔥 34</button></div>
+        <div class="post-meta-r"><span>23 comments</span><span>1,204 downloads</span></div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-author">
+        <div class="avatar" style="color:#60A5FA;">MK</div>
+        <div><div class="author-name">mikeclaude</div><div class="post-date">Apr 3</div></div>
+      </div>
+      <h2>CLAUDE.md for Next.js + TypeScript + Supabase — The Config I Use on Every Project</h2>
+      <div class="post-tags"><span class="post-tag">#nextjs</span><span class="post-tag">#typescript</span><span class="post-tag">#supabase</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;"><span class="type-badge tb-pick">Staff Pick</span><span class="type-badge tb-config">CLAUDE.md</span></div>
+      <div class="post-actions">
+        <div class="reactions"><button class="reaction">👍 63</button><button class="reaction">🔥 21</button></div>
+        <div class="post-meta-r"><span>12 comments</span><span>489 downloads</span></div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-author">
+        <div class="avatar" style="color:#FB923C;">SL</div>
+        <div><div class="author-name">sarahliu</div><div class="post-date">Apr 2</div></div>
+      </div>
+      <h2>Multi-Agent Workflows: Running Parallel Claude Code Instances</h2>
+      <div class="post-tags"><span class="post-tag">#claude-code</span><span class="post-tag">#workflow</span><span class="post-tag">#multi-agent</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;"><span class="type-badge tb-guide">Guide</span></div>
+      <div class="post-actions">
+        <div class="reactions"><button class="reaction">👍 55</button><button class="reaction">💡 18</button></div>
+        <div class="post-meta-r"><span>14 comments</span><span>4 min read</span></div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-author">
+        <div class="avatar" style="color:#A78BFA;">AK</div>
+        <div><div class="author-name">amirkhan</div><div class="post-date">Apr 1</div></div>
+      </div>
+      <h2>Auto-Generate Git Commit Messages — A Skill That Saves Me 5 Minutes Per Commit</h2>
+      <div class="post-tags"><span class="post-tag">#git</span><span class="post-tag">#automation</span><span class="post-tag">#claude-code</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;"><span class="type-badge tb-pick">Staff Pick</span><span class="type-badge tb-skill">Skill</span></div>
+      <div class="post-actions">
+        <div class="reactions"><button class="reaction">👍 47</button><button class="reaction">🔥 15</button></div>
+        <div class="post-meta-r"><span>8 comments</span><span>312 downloads</span></div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-author">
+        <div class="avatar" style="color:#4ADE80;">RN</div>
+        <div><div class="author-name">racheln</div><div class="post-date">Mar 31</div></div>
+      </div>
+      <h2>Auto-Format Files on Save — The Hook Every Project Needs</h2>
+      <div class="post-tags"><span class="post-tag">#automation</span><span class="post-tag">#prettier</span><span class="post-tag">#hooks</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;"><span class="type-badge tb-hook">Hook</span></div>
+      <div class="post-actions">
+        <div class="reactions"><button class="reaction">👍 31</button></div>
+        <div class="post-meta-r"><span>5 comments</span><span>156 downloads</span></div>
+      </div>
+    </article>
+  </main>
+
+  <!-- RIGHT -->
+  <aside class="sidebar-right">
+    <div class="cta-box">
+      <h3>Share what you've built</h3>
+      <p>If it helped you, it'll help someone else.</p>
+      <a href="#">Submit a Resource</a>
+    </div>
+    <div class="sidebar-box">
+      <div class="stats-row">
+        <div><div class="stat-num">248</div><div class="stat-label">Resources</div></div>
+        <div><div class="stat-num">89</div><div class="stat-label">Contributors</div></div>
+      </div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-box-header">Active Discussions</div>
+      <div class="disc-item"><div class="disc-votes">34</div><div><div class="disc-title">What's your CLAUDE.md look like?</div><div class="disc-meta">12 comments</div></div></div>
+      <div class="disc-item"><div class="disc-votes">28</div><div><div class="disc-title">Best MCP servers you use daily?</div><div class="disc-meta">19 comments</div></div></div>
+      <div class="disc-item"><div class="disc-votes">21</div><div><div class="disc-title">Rate limit strategies?</div><div class="disc-meta">8 comments</div></div></div>
+      <div class="disc-item"><div class="disc-votes">19</div><div><div class="disc-title">Claude Code vs Cursor?</div><div class="disc-meta">24 comments</div></div></div>
+    </div>
+  </aside>
+</div>
+
+</div>
+
+<script>
+const schemes = [
+  { name:"Current (Amber Dark)", bg:"#151719", fg:"#EDEDEC", muted:"#8A8884", border:"#282B33", card:"#1C1F24", cardHover:"#24272E", accent:"#D4A853" },
+  { name:"Light Blue (DEV.to)", bg:"#F5F5F5", fg:"#171717", muted:"#717171", border:"#E5E5E5", card:"#FFFFFF", cardHover:"#F0F0F0", accent:"#3B49DF" },
+  { name:"Warm Cream", bg:"#FAF8F5", fg:"#2D2A26", muted:"#8A847A", border:"#E5E0D8", card:"#FFFFFF", cardHover:"#F5F0EB", accent:"#C0392B" },
+  { name:"Midnight Sky", bg:"#0F172A", fg:"#E2E8F0", muted:"#64748B", border:"#1E293B", card:"#1E293B", cardHover:"#334155", accent:"#38BDF8" },
+  { name:"Neon Coral", bg:"#1A1A2E", fg:"#EAEAEA", muted:"#8888A0", border:"#2A2A42", card:"#22223A", cardHover:"#2E2E4A", accent:"#E94560" },
+  { name:"GitHub Dark", bg:"#0D1117", fg:"#E6EDF3", muted:"#8B949E", border:"#21262D", card:"#161B22", cardHover:"#1C2129", accent:"#3FB950" },
+  { name:"Clean Gray", bg:"#F9FAFB", fg:"#111827", muted:"#6B7280", border:"#E5E7EB", card:"#FFFFFF", cardHover:"#F3F4F6", accent:"#111827" },
+  { name:"Leather Warm", bg:"#1C1917", fg:"#F5F0EB", muted:"#A8A094", border:"#3D362F", card:"#231F1C", cardHover:"#2C2723", accent:"#E89B4C" },
+];
+
+function setScheme(i) {
+  const s = schemes[i];
+  const r = document.documentElement.style;
+  r.setProperty('--bg', s.bg);
+  r.setProperty('--fg', s.fg);
+  r.setProperty('--muted', s.muted);
+  r.setProperty('--border', s.border);
+  r.setProperty('--card', s.card);
+  r.setProperty('--card-hover', s.cardHover);
+  r.setProperty('--accent', s.accent);
+  document.getElementById('scheme-name').textContent = s.name;
+  document.querySelectorAll('.swatch').forEach((el,j) => {
+    el.classList.toggle('active', j===i);
+  });
+}
+</script>
+
+</body>
+</html>

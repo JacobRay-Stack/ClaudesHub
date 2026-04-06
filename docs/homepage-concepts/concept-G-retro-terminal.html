@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Concept G: Retro Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  body {
+    background: #0A0A08;
+    color: #33FF33;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  /* Scanline effect */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+  a { color: #33FF33; }
+  a:hover { color: #88FF88; }
+
+  .dim { color: #1A8C1A; }
+  .bright { color: #88FF88; }
+  .amber { color: #FFB800; }
+  .red { color: #FF4444; }
+  .cyan { color: #00DDDD; }
+  .white { color: #CCCCCC; }
+
+  /* NAV */
+  nav {
+    padding: 12px 0;
+    border-bottom: 1px solid #1A3A1A;
+  }
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { font-weight: 700; font-size: 1rem; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    text-decoration: none;
+    padding: 4px 8px;
+    color: #1A8C1A;
+  }
+  .nav-links a:hover { color: #33FF33; background: #0F1F0F; }
+  .nav-links a.active { color: #33FF33; }
+  .nav-cta {
+    color: #0A0A08 !important;
+    background: #33FF33;
+    padding: 4px 12px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .nav-cta:hover { background: #88FF88; }
+
+  /* HERO */
+  .hero {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid #1A3A1A;
+  }
+  .prompt-line { margin-bottom: 4px; }
+  .prompt { color: #FFB800; }
+  .cursor { animation: blink 1s infinite; }
+
+  .hero-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #88FF88;
+    margin: 16px 0 8px;
+    line-height: 1.3;
+  }
+  .hero-desc {
+    color: #1A8C1A;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  .hero-actions { display: flex; gap: 8px; }
+  .btn-term {
+    background: #33FF33;
+    color: #0A0A08;
+    padding: 8px 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .btn-term:hover { background: #88FF88; color: #0A0A08; }
+  .btn-term-outline {
+    border: 1px solid #33FF33;
+    color: #33FF33;
+    padding: 8px 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .btn-term-outline:hover { background: #0F1F0F; }
+
+  .stats-line {
+    margin-top: 20px;
+    color: #1A8C1A;
+    font-size: 0.8rem;
+  }
+  .stats-line span { color: #33FF33; }
+
+  /* SECTIONS */
+  .section {
+    padding: 32px 0;
+    border-bottom: 1px solid #1A3A1A;
+  }
+  .section-header {
+    color: #FFB800;
+    font-weight: 600;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+  }
+
+  /* ASCII TABLE */
+  .ascii-table {
+    width: 100%;
+    font-size: 0.8rem;
+    border-collapse: collapse;
+  }
+  .ascii-table th {
+    text-align: left;
+    color: #1A8C1A;
+    padding: 6px 12px 6px 0;
+    border-bottom: 1px solid #1A3A1A;
+    font-weight: 400;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .ascii-table td {
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid #0F1F0F;
+    vertical-align: top;
+  }
+  .ascii-table tr:hover td { background: #0F1F0F; }
+  .ascii-table a { text-decoration: none; }
+  .ascii-table a:hover { text-decoration: underline; }
+
+  .votes { color: #FFB800; font-weight: 600; min-width: 40px; display: inline-block; }
+  .type-tag { font-size: 0.7rem; }
+  .dl-count { color: #1A8C1A; }
+
+  /* DISCUSSIONS */
+  .disc-list { list-style: none; }
+  .disc-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #0F1F0F;
+    display: flex;
+    gap: 12px;
+  }
+  .disc-list li:hover { background: #0F1F0F; }
+  .disc-num { color: #FFB800; font-weight: 600; min-width: 24px; }
+  .disc-title a { text-decoration: none; }
+  .disc-title a:hover { text-decoration: underline; }
+  .disc-meta { color: #1A8C1A; font-size: 0.75rem; }
+
+  /* TWO COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 40px;
+  }
+
+  /* SEPARATOR */
+  .sep {
+    text-align: center;
+    color: #1A3A1A;
+    padding: 8px 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 20px 0;
+    color: #1A8C1A;
+    font-size: 0.7rem;
+  }
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  footer a { color: #1A8C1A; text-decoration: none; }
+  footer a:hover { color: #33FF33; }
+  footer nav { display: flex; gap: 16px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">[ClaudesHub]</div>
+    <div class="nav-links">
+      <a href="#" class="active">/home</a>
+      <a href="#">/resources</a>
+      <a href="#">/discussions</a>
+      <a href="#">/about</a>
+      <a href="#" class="nav-cta">sign_up</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="prompt-line"><span class="prompt">user@claudeshub:~$</span> cat welcome.md</div>
+    <div class="hero-title">The community for Claude Code builders.</div>
+    <div class="hero-desc">
+      Skills, configs, hooks, and MCP servers — discovered, shared, and
+      refined by the people who use them. Real reviews. Real downloads.
+      No marketing fluff.
+    </div>
+    <div class="hero-actions">
+      <a href="#" class="btn-term">browse_resources</a>
+      <a href="#" class="btn-term-outline">share_something</a>
+    </div>
+    <div class="stats-line">
+      <span>248</span> resources | <span>89</span> contributors | <span>1,247</span> downloads this week<span class="cursor">_</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">// STAFF_PICKS — curated by the team</div>
+    <table class="ascii-table">
+      <thead>
+        <tr>
+          <th>votes</th>
+          <th>type</th>
+          <th>title</th>
+          <th>downloads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="votes">89</span></td>
+          <td><span class="type-tag cyan">mcp-server</span></td>
+          <td><a href="#">Supabase — Full Database Access</a></td>
+          <td><span class="dl-count">1,204</span></td>
+        </tr>
+        <tr>
+          <td><span class="votes">63</span></td>
+          <td><span class="type-tag amber">claude.md</span></td>
+          <td><a href="#">Next.js + TypeScript + Supabase Config</a></td>
+          <td><span class="dl-count">489</span></td>
+        </tr>
+        <tr>
+          <td><span class="votes">55</span></td>
+          <td><span class="type-tag red">guide</span></td>
+          <td><a href="#">Multi-Agent Workflows with Claude Code</a></td>
+          <td><span class="dl-count">—</span></td>
+        </tr>
+        <tr>
+          <td><span class="votes">47</span></td>
+          <td><span class="type-tag">skill</span></td>
+          <td><a href="#">Auto-Generate Git Commit Messages</a></td>
+          <td><span class="dl-count">312</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="sep">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
+
+<section class="section" style="border-bottom:none;">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-header">// TRENDING — community voted</div>
+        <table class="ascii-table">
+          <thead>
+            <tr><th>votes</th><th>type</th><th>title</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="votes">42</span></td>
+              <td><span class="type-tag">skill</span></td>
+              <td><a href="#">PR Review Checklist Generator</a></td>
+            </tr>
+            <tr>
+              <td><span class="votes">38</span></td>
+              <td><span class="type-tag">skill</span></td>
+              <td><a href="#">API Documentation Generator</a></td>
+            </tr>
+            <tr>
+              <td><span class="votes">31</span></td>
+              <td><span class="type-tag bright">hook</span></td>
+              <td><a href="#">Auto-Format Files on Save</a></td>
+            </tr>
+            <tr>
+              <td><span class="votes">28</span></td>
+              <td><span class="type-tag" style="color:#F472B6">prompt</span></td>
+              <td><a href="#">SQL Query Builder from Natural Language</a></td>
+            </tr>
+            <tr>
+              <td><span class="votes">25</span></td>
+              <td><span class="type-tag cyan">mcp-server</span></td>
+              <td><a href="#">GitHub — Full Repo Access</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="section-header">// DISCUSSIONS — community talk</div>
+        <ul class="disc-list">
+          <li>
+            <span class="disc-num">34</span>
+            <div>
+              <div class="disc-title"><a href="#">What's your CLAUDE.md look like?</a></div>
+              <div class="disc-meta">12 comments</div>
+            </div>
+          </li>
+          <li>
+            <span class="disc-num">28</span>
+            <div>
+              <div class="disc-title"><a href="#">Best MCP servers you use daily?</a></div>
+              <div class="disc-meta">19 comments</div>
+            </div>
+          </li>
+          <li>
+            <span class="disc-num">21</span>
+            <div>
+              <div class="disc-title"><a href="#">Rate limit strategies?</a></div>
+              <div class="disc-meta">8 comments</div>
+            </div>
+          </li>
+          <li>
+            <span class="disc-num">19</span>
+            <div>
+              <div class="disc-title"><a href="#">Claude Code vs Cursor?</a></div>
+              <div class="disc-meta">24 comments</div>
+            </div>
+          </li>
+          <li>
+            <span class="disc-num">15</span>
+            <div>
+              <div class="disc-title"><a href="#">Tips for consistent output</a></div>
+              <div class="disc-meta">11 comments</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>[ClaudesHub] v1.0.0</span>
+    <nav>
+      <a href="#">/resources</a>
+      <a href="#">/discussions</a>
+      <a href="#">/about</a>
+      <a href="#">/guidelines</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

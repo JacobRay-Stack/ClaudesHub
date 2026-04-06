@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Concept C: Terminal Hacker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0A0E14;
+    --surface: #0F1319;
+    --surface-2: #161C26;
+    --fg: #B8C4D0;
+    --bright: #E6EDF3;
+    --muted: #5C6980;
+    --border: #1E2736;
+    --green: #3FB950;
+    --green-dim: rgba(63,185,80,0.1);
+    --blue: #58A6FF;
+    --orange: #D29922;
+    --red: #F85149;
+    --purple: #BC8CFF;
+  }
+
+  body { background: var(--bg); color: var(--fg); font-family: 'Manrope', sans-serif; }
+
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,20,0.9); backdrop-filter: blur(16px);
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
+  .logo .slash { color: var(--muted); }
+  .logo .name { color: var(--green); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    padding: 6px 12px; border-radius: 6px; transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--bright); background: var(--surface-2); }
+  .nav-cta {
+    font-family: 'Space Mono', monospace; font-size: 0.8rem;
+    background: var(--green); color: var(--bg); padding: 6px 16px;
+    border-radius: 6px; text-decoration: none; font-weight: 700;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent 49.5%, var(--border) 49.5%, var(--border) 50.5%, transparent 50.5%),
+      linear-gradient(0deg, transparent 49.5%, var(--border) 49.5%, var(--border) 50.5%, transparent 50.5%);
+    background-size: 60px 60px;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .hero .container { position: relative; }
+  .hero-terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 700px;
+  }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .term-dot.r { background: var(--red); }
+  .term-dot.y { background: var(--orange); }
+  .term-dot.g { background: var(--green); }
+  .term-title { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-left: 8px; }
+  .term-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem; line-height: 1.8;
+  }
+  .term-body .prompt { color: var(--green); }
+  .term-body .cmd { color: var(--bright); }
+  .term-body .comment { color: var(--muted); }
+  .term-body .output { color: var(--blue); }
+  .term-body .highlight { color: var(--orange); }
+
+  .hero-text { margin-top: 40px; }
+  .hero h1 {
+    font-family: 'Manrope', sans-serif; font-size: 3rem; font-weight: 800;
+    color: var(--bright); line-height: 1.15; margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--green); }
+  .hero p { font-size: 1rem; color: var(--muted); max-width: 500px; margin-bottom: 24px; }
+  .hero-actions { display: flex; gap: 10px; }
+  .btn-green {
+    background: var(--green); color: var(--bg); padding: 12px 24px;
+    border-radius: 8px; font-weight: 700; text-decoration: none;
+    font-family: 'Space Mono', monospace; font-size: 0.85rem;
+  }
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--fg); padding: 12px 24px;
+    border-radius: 8px; font-weight: 500; text-decoration: none;
+    font-family: 'Space Mono', monospace; font-size: 0.85rem;
+  }
+  .btn-outline:hover { border-color: var(--green); color: var(--green); }
+
+  /* SECTION */
+  .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    color: var(--green); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 4px;
+  }
+  .section-title { font-size: 1.3rem; font-weight: 700; color: var(--bright); margin-bottom: 24px; }
+
+  /* TABLE STYLE CARDS */
+  .resource-table { display: flex; flex-direction: column; }
+  .resource-row {
+    display: grid;
+    grid-template-columns: 80px 100px 1fr 120px;
+    gap: 16px; align-items: center;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--surface);
+    text-decoration: none; color: inherit;
+    transition: background 0.15s;
+    font-size: 0.85rem;
+  }
+  .resource-row:first-child { border-radius: 8px 8px 0 0; }
+  .resource-row:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+  .resource-row:hover { background: var(--surface-2); }
+  .row-votes { font-family: 'Space Mono', monospace; font-weight: 700; color: var(--green); text-align: center; }
+  .row-type { font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+  .type-skill { color: var(--blue); }
+  .type-config { color: var(--orange); }
+  .type-mcp { color: var(--purple); }
+  .type-hook { color: var(--green); }
+  .type-guide { color: var(--orange); }
+  .type-prompt { color: #F472B6; }
+  .row-title { color: var(--bright); font-weight: 500; }
+  .row-title:hover { text-decoration: underline; }
+  .row-meta { font-size: 0.75rem; color: var(--muted); text-align: right; }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 80px 100px 1fr 120px;
+    gap: 16px; padding: 8px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  /* DISC */
+  .two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 40px; }
+  .disc-item {
+    display: flex; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .disc-item:hover .disc-title { color: var(--green); }
+  .disc-votes {
+    font-family: 'Space Mono', monospace; font-size: 0.85rem;
+    font-weight: 700; color: var(--green); min-width: 32px;
+  }
+  .disc-title { font-size: 0.85rem; color: var(--bright); transition: color 0.15s; }
+  .disc-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+  /* FOOTER */
+  footer { padding: 32px 0; }
+  footer .container {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--green); }
+  footer nav { display: flex; gap: 20px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo"><span class="slash">~/</span><span class="name">claudeshub</span></div>
+    <div class="nav-links">
+      <a href="#">/resources</a>
+      <a href="#">/discussions</a>
+      <a href="#">/about</a>
+    </div>
+    <a href="#" class="nav-cta">sign up</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-terminal">
+      <div class="term-bar">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <div class="term-title">claudeshub ~ discovery</div>
+      </div>
+      <div class="term-body">
+        <span class="prompt">$</span> <span class="cmd">claudeshub search</span> <span class="highlight">"mcp server supabase"</span><br>
+        <br>
+        <span class="comment"># Found 3 results, sorted by community votes</span><br>
+        <br>
+        <span class="output">1. Supabase MCP Server</span> <span class="comment">— 89 upvotes, 1.2k downloads</span><br>
+        <span class="output">2. Supabase Realtime MCP</span> <span class="comment">— 34 upvotes, 412 downloads</span><br>
+        <span class="output">3. Postgres Direct Connect</span> <span class="comment">— 28 upvotes, 289 downloads</span><br>
+        <br>
+        <span class="prompt">$</span> <span class="cmd">claudeshub install</span> <span class="highlight">supabase-mcp</span><br>
+        <span class="output">Config copied to settings.json ✓</span><br>
+      </div>
+    </div>
+    <div class="hero-text">
+      <h1>Find what <span>works</span>.<br>Skip what doesn't.</h1>
+      <p>Community-vetted skills, configs, hooks, and MCP servers for Claude Code. Real reviews. Real download counts. No guessing.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-green">browse resources</a>
+        <a href="#" class="btn-outline">share something</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">// staff_picks</div>
+    <div class="section-title">Curated by the team</div>
+    <div class="table-header">
+      <div>votes</div><div>type</div><div>title</div><div style="text-align:right">downloads</div>
+    </div>
+    <div class="resource-table">
+      <a href="#" class="resource-row">
+        <div class="row-votes">89</div>
+        <div class="row-type type-mcp">mcp-server</div>
+        <div class="row-title">Supabase — Full Database Access</div>
+        <div class="row-meta">1,204 dl</div>
+      </a>
+      <a href="#" class="resource-row">
+        <div class="row-votes">63</div>
+        <div class="row-type type-config">claude.md</div>
+        <div class="row-title">Next.js + TypeScript + Supabase Config</div>
+        <div class="row-meta">489 dl</div>
+      </a>
+      <a href="#" class="resource-row">
+        <div class="row-votes">55</div>
+        <div class="row-type type-guide">guide</div>
+        <div class="row-title">Multi-Agent Workflows with Claude Code</div>
+        <div class="row-meta">—</div>
+      </a>
+      <a href="#" class="resource-row">
+        <div class="row-votes">47</div>
+        <div class="row-type type-skill">skill</div>
+        <div class="row-title">Auto-Generate Git Commit Messages</div>
+        <div class="row-meta">312 dl</div>
+      </a>
+      <a href="#" class="resource-row">
+        <div class="row-votes">42</div>
+        <div class="row-type type-skill">skill</div>
+        <div class="row-title">PR Review Checklist Generator</div>
+        <div class="row-meta">198 dl</div>
+      </a>
+      <a href="#" class="resource-row">
+        <div class="row-votes">31</div>
+        <div class="row-type type-hook">hook</div>
+        <div class="row-title">Auto-Format Files on Save</div>
+        <div class="row-meta">156 dl</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">// community</div>
+    <div class="section-title">Discussions</div>
+    <a href="#" class="disc-item">
+      <div class="disc-votes">34</div>
+      <div><div class="disc-title">What's your CLAUDE.md look like?</div><div class="disc-meta">12 comments &middot; 3h ago</div></div>
+    </a>
+    <a href="#" class="disc-item">
+      <div class="disc-votes">28</div>
+      <div><div class="disc-title">Best MCP servers you use daily?</div><div class="disc-meta">19 comments &middot; 5h ago</div></div>
+    </a>
+    <a href="#" class="disc-item">
+      <div class="disc-votes">21</div>
+      <div><div class="disc-title">Rate limit strategies — what's working for you?</div><div class="disc-meta">8 comments &middot; 8h ago</div></div>
+    </a>
+    <a href="#" class="disc-item">
+      <div class="disc-votes">19</div>
+      <div><div class="disc-title">Claude Code vs Cursor — when do you use which?</div><div class="disc-meta">24 comments &middot; 12h ago</div></div>
+    </a>
+    <a href="#" class="disc-item">
+      <div class="disc-votes">15</div>
+      <div><div class="disc-title">Tips for getting consistent output from prompts</div><div class="disc-meta">11 comments &middot; 1d ago</div></div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div><span class="logo"><span class="slash">~/</span><span class="name">claudeshub</span></span></div>
+    <nav>
+      <a href="#">resources</a>
+      <a href="#">discussions</a>
+      <a href="#">about</a>
+      <a href="#">guidelines</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

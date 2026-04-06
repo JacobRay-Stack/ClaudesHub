@@ -59,11 +59,15 @@ export interface ResourceFile {
   created_at: string;
 }
 
+export type DiscussionType = "question" | "showcase" | "tips" | "meta";
+
 export interface Discussion {
   id: string;
   title: string;
   slug: string;
   body: string | null;
+  discussion_type: DiscussionType;
+  is_answered: boolean;
   author_id: string;
   category_id: number | null;
   upvote_count: number;

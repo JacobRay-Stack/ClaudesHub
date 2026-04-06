@@ -1,4 +1,5 @@
 import { VIBE_TOPICS } from "@/lib/vibe-coders-data";
+import { TermSearch } from "@/components/vibe-coders/TermSearch";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -9,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function VibeCodersPage() {
-  // Count total terms across all topics
   const totalTerms = VIBE_TOPICS.reduce(
     (acc, t) => acc + t.sections.reduce((a, s) => a + s.terms.length, 0),
     0
@@ -38,6 +38,45 @@ export default function VibeCodersPage() {
               {VIBE_TOPICS.length} topics &middot; {totalTerms} terms
               &middot; Plain English with real-world analogies
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Term Search */}
+      <section className="border-b border-border bg-card">
+        <div className="mx-auto max-w-6xl px-4 py-6">
+          <TermSearch />
+        </div>
+      </section>
+
+      {/* Before/After */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <h2 className="font-display font-bold mb-6 text-muted uppercase tracking-widest text-xs">
+            Why Terminology Matters
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-danger/20 bg-danger/5 p-5">
+              <p className="text-xs font-mono text-danger mb-2">WITHOUT TERMINOLOGY</p>
+              <p className="text-sm text-foreground italic">
+                "Make it save stuff when they click the button and then show it
+                on the other page"
+              </p>
+              <p className="text-xs text-muted mt-3">
+                AI guesses. 5 back-and-forths. Wrong result half the time.
+              </p>
+            </div>
+            <div className="rounded-lg border border-success/20 bg-success/5 p-5">
+              <p className="text-xs font-mono text-success mb-2">WITH TERMINOLOGY</p>
+              <p className="text-sm text-foreground italic">
+                "Create a server action that inserts a row into the resources
+                table with title and author_id, then redirect to
+                /resources/[slug]"
+              </p>
+              <p className="text-xs text-muted mt-3">
+                AI nails it first try. One prompt. Done.
+              </p>
+            </div>
           </div>
         </div>
       </section>

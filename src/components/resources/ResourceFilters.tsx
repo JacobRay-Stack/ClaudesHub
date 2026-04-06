@@ -35,11 +35,6 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
     router.push(`/resources?${params.toString()}`);
   }
 
-  const categoryTabs = [
-    { value: "", label: "All" },
-    ...categories.map((c) => ({ value: c.slug, label: c.name })),
-  ];
-
   return (
     <div className="space-y-3">
       <div className="flex flex-col sm:flex-row gap-3">
@@ -49,11 +44,25 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
           placeholder="Search resources..."
           className="flex-1"
         />
-        <Tabs
-          tabs={SORT_OPTIONS}
-          value={sort}
-          onChange={(v) => updateParams("sort", v)}
-        />
+        <div className="flex items-center gap-3">
+          <select
+            value={category}
+            onChange={(e) => updateParams("category", e.target.value)}
+            className="rounded-lg border border-border bg-input-bg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
+          >
+            <option value="">All Categories</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.slug}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          <Tabs
+            tabs={SORT_OPTIONS}
+            value={sort}
+            onChange={(v) => updateParams("sort", v)}
+          />
+        </div>
       </div>
 
       {/* Type filter (primary) */}
@@ -65,23 +74,6 @@ export function ResourceFilters({ categories }: ResourceFiltersProps) {
             className={`whitespace-nowrap px-3 py-1.5 text-sm rounded-full border transition-colors cursor-pointer ${
               type === tab.value
                 ? "bg-accent text-black border-accent font-medium"
-                : "border-border text-muted hover:text-foreground hover:border-foreground/20"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Category filter (secondary) */}
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-        {categoryTabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => updateParams("category", tab.value)}
-            className={`whitespace-nowrap px-3 py-1.5 text-sm rounded-full border transition-colors cursor-pointer ${
-              category === tab.value
-                ? "bg-card-hover text-foreground border-foreground/20 font-medium"
                 : "border-border text-muted hover:text-foreground hover:border-foreground/20"
             }`}
           >

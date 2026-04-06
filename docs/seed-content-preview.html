@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub Seed Content Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #151719;
+    --fg: #EDEDEC;
+    --muted: #8A8884;
+    --border: #282B33;
+    --card: #1C1F24;
+    --card-hover: #24272E;
+    --accent: #D4A853;
+    --accent-dim: #9E7B38;
+    --success: #4ADE80;
+    --danger: #EF6B6B;
+    --type-config: #60A5FA;
+    --type-mcp: #A78BFA;
+    --type-guide: #FB923C;
+    --type-prompt: #F472B6;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Outfit', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  h1 span { color: var(--accent); }
+
+  .subtitle { color: var(--muted); margin-bottom: 40px; }
+
+  .resource {
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .resource-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .resource-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .badge-skill { background: rgba(212,168,83,0.1); border-color: rgba(212,168,83,0.2); color: var(--accent); }
+  .badge-config { background: rgba(96,165,250,0.1); border-color: rgba(96,165,250,0.2); color: var(--type-config); }
+  .badge-mcp { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.2); color: var(--type-mcp); }
+  .badge-hook { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.2); color: var(--success); }
+  .badge-guide { background: rgba(251,146,60,0.1); border-color: rgba(251,146,60,0.2); color: var(--type-guide); }
+  .badge-prompt { background: rgba(244,114,182,0.1); border-color: rgba(244,114,182,0.2); color: var(--type-prompt); }
+  .badge-category { background: var(--card-hover); border-color: var(--border); color: var(--muted); }
+  .badge-staff { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.2); color: var(--success); }
+
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 24px; border-bottom: 1px solid var(--border); }
+  .tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--muted);
+  }
+
+  .resource-body { padding: 24px; }
+
+  .resource-body h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--fg);
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+  .resource-body h3:first-child { margin-top: 0; }
+
+  .resource-body p {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+  }
+
+  .resource-body ul {
+    color: var(--muted);
+    font-size: 0.875rem;
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .resource-body li { margin-bottom: 4px; }
+  .resource-body li strong { color: var(--fg); }
+
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--fg);
+    line-height: 1.5;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  .config-box {
+    border: 1px solid rgba(167,139,250,0.2);
+    background: rgba(167,139,250,0.05);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .config-box .config-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--type-mcp);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .stats-bar span { display: flex; align-items: center; gap: 4px; }
+  .stats-bar strong { color: var(--fg); }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .nav-hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Claudes<span>Hub</span> Seed Content</h1>
+<p class="subtitle">6 example resources — one per type. This is what the site looks like with real content.</p>
+
+<!-- SKILL -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>Auto-Generate Git Commit Messages</h2>
+    <div class="badges">
+      <span class="badge badge-staff">Staff Pick</span>
+      <span class="badge badge-skill">Skill</span>
+      <span class="badge badge-category">Git &amp; Review</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">git</span>
+    <span class="tag">automation</span>
+    <span class="tag">claude-code</span>
+    <span class="tag">developer</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>47</strong> upvotes</span>
+    <span><strong>312</strong> downloads</span>
+    <span><strong>8</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>A skill that analyzes your staged changes and writes a conventional commit message.</p>
+
+    <h3>What It Does</h3>
+    <p>When you run /commit, this skill reads your git diff, understands the intent of the changes, and generates a commit message following Conventional Commits format (feat:, fix:, refactor:, etc.). It includes a short subject line and a body explaining the "why" when the change is non-trivial.</p>
+
+    <h3>Installation</h3>
+    <p>Copy the skill folder to your skills directory:</p>
+    <pre>~/.claude/skills/commit-generator/</pre>
+
+    <h3>Usage</h3>
+    <p>Stage your changes, then tell Claude:</p>
+    <ul>
+      <li>"commit this"</li>
+      <li>"write a commit message for my changes"</li>
+      <li><code>/commit</code></li>
+    </ul>
+
+    <h3>The Code</h3>
+<pre># commit-generator SKILL.md
+---
+name: commit-generator
+description: Generate conventional commit messages from staged changes
+triggers:
+  - /commit
+  - commit this
+---
+
+Analyze the current `git diff --staged` output. Write a commit message following
+Conventional Commits:
+
+1. Determine the type: feat, fix, refactor, docs, test, chore, style, perf
+2. Write a subject line under 72 characters (imperative mood)
+3. If the change is non-trivial, add a body explaining WHY, not what
+4. If multiple concerns, suggest splitting into separate commits
+
+Format:
+```
+type(scope): subject
+
+Body explaining the motivation and context.
+```
+
+Do NOT include file lists. Focus on intent and impact.</pre>
+
+    <h3>Compatibility</h3>
+    <p>Claude Code v1.x+. Works on Mac, Windows, Linux. Requires git installed.</p>
+  </div>
+</div>
+
+<!-- CLAUDE.md -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>CLAUDE.md for Next.js + TypeScript + Supabase</h2>
+    <div class="badges">
+      <span class="badge badge-staff">Staff Pick</span>
+      <span class="badge badge-config">CLAUDE.md</span>
+      <span class="badge badge-category">Code &amp; Refactoring</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">nextjs</span>
+    <span class="tag">typescript</span>
+    <span class="tag">tailwind</span>
+    <span class="tag">supabase</span>
+    <span class="tag">developer</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>63</strong> upvotes</span>
+    <span><strong>489</strong> downloads</span>
+    <span><strong>12</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>A battle-tested CLAUDE.md for Next.js App Router projects using TypeScript, Tailwind CSS v4, and Supabase.</p>
+
+    <h3>Stack</h3>
+    <p>Next.js 16, React 19, TypeScript, Tailwind CSS v4, Supabase (auth, database, storage)</p>
+
+    <h3>What It Configures</h3>
+    <ul>
+      <li>Enforces App Router conventions (page.tsx, layout.tsx, server components by default)</li>
+      <li>Requires TypeScript strict mode patterns</li>
+      <li>Uses Tailwind utility classes, no CSS modules</li>
+      <li>Supabase client created via server/client helpers, never raw imports</li>
+      <li>RLS policies required for every new table</li>
+      <li>Server actions for mutations, not API routes</li>
+    </ul>
+
+    <h3>The File</h3>
+<pre># Project CLAUDE.md
+
+## Tech Stack
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS v4 with CSS variables for theming
+- Supabase (auth, Postgres, storage)
+
+## Conventions
+- All components in src/components/, grouped by feature
+- All pages in src/app/ following App Router conventions
+- Server components by default. Add "use client" only when needed
+- Use createServerClient() from @/lib/supabase/server for server-side
+- Use createBrowserClient() from @/lib/supabase/client for client-side
+- Never import supabase-js directly
+
+## Code Style
+- TypeScript strict. No `any`.
+- Tailwind for all styling. No CSS modules.
+- Use `cn()` utility for conditional classes
+- Prefer server actions over API routes for mutations
+
+## Database
+- Every new table needs RLS policies
+- Use migrations in supabase/migrations/
+- Foreign keys reference profiles(id) for user relations
+
+## Don't
+- Don't use pages router patterns
+- Don't skip RLS policies
+- Don't use inline styles
+- Don't commit .env files</pre>
+
+    <h3>Customization</h3>
+    <p>Swap the Supabase references for Prisma/Drizzle if you're not using Supabase. The Next.js and Tailwind conventions apply regardless of your database choice.</p>
+  </div>
+</div>
+
+<!-- MCP SERVER -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>Supabase MCP Server — Full Database Access</h2>
+    <div class="badges">
+      <span class="badge badge-staff">Staff Pick</span>
+      <span class="badge badge-mcp">MCP Server</span>
+      <span class="badge badge-category">Data &amp; Analytics</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">mcp</span>
+    <span class="tag">supabase</span>
+    <span class="tag">sql</span>
+    <span class="tag">database</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>89</strong> upvotes</span>
+    <span><strong>1,204</strong> downloads</span>
+    <span><strong>23</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>Connect Claude Code directly to your Supabase project. Query tables, inspect schema, run migrations, and manage storage without leaving the terminal.</p>
+
+    <div class="config-box">
+      <div class="config-label">Config — copy to settings.json</div>
+<pre style="margin:0;border:none;background:transparent;">{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server",
+        "--project-ref",
+        "YOUR_PROJECT_REF"
+      ]
+    }
+  }
+}</pre>
+    </div>
+
+    <h3>Environment Variables</h3>
+    <ul>
+      <li><strong><code>SUPABASE_ACCESS_TOKEN</code></strong> — Get from supabase.com/dashboard/account/tokens</li>
+    </ul>
+
+    <h3>Available Tools</h3>
+    <ul>
+      <li><strong>list_tables</strong> — List all tables in your database</li>
+      <li><strong>execute_sql</strong> — Run any SQL query</li>
+      <li><strong>get_table_schema</strong> — Inspect columns, types, and constraints</li>
+      <li><strong>list_extensions</strong> — See installed Postgres extensions</li>
+      <li><strong>apply_migration</strong> — Run a migration file</li>
+      <li><strong>list_storage_buckets</strong> — See storage buckets</li>
+    </ul>
+
+    <h3>Token Usage</h3>
+    <ul>
+      <li><strong>Init:</strong> ~8,000 tokens (schema loaded on startup)</li>
+      <li><strong>Per call:</strong> ~500–2,000 tokens depending on result size</li>
+      <li><strong>Tip:</strong> If you have 50+ tables, init tokens increase significantly. Use LIMIT in queries.</li>
+    </ul>
+
+    <h3>Setup Steps</h3>
+    <ul>
+      <li>1. Go to supabase.com/dashboard/account/tokens</li>
+      <li>2. Generate a new access token</li>
+      <li>3. Set it: <code>export SUPABASE_ACCESS_TOKEN=your_token</code></li>
+      <li>4. Add the config above to your settings.json</li>
+      <li>5. Replace YOUR_PROJECT_REF with your project ref (found in project settings)</li>
+      <li>6. Restart Claude Code</li>
+    </ul>
+
+    <h3>Example Prompts</h3>
+    <ul>
+      <li>"Show me all tables in the database"</li>
+      <li>"Query the resources table for the top 10 by upvote count"</li>
+      <li>"Add a reputation column to the profiles table"</li>
+      <li>"Create a migration that adds a notifications table"</li>
+    </ul>
+
+    <h3>Gotchas</h3>
+    <ul>
+      <li>The project ref is NOT your API URL. It's the short string like "rynqjcskoburetbftplk"</li>
+      <li><code>execute_sql</code> runs with full privileges. Be careful with DELETE and DROP</li>
+      <li>Large result sets can eat tokens fast. Use LIMIT in your queries</li>
+      <li>On Windows, you may need to use the full path to npx</li>
+    </ul>
+  </div>
+</div>
+
+<!-- HOOK -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>Auto-Format Files on Save</h2>
+    <div class="badges">
+      <span class="badge badge-hook">Hook</span>
+      <span class="badge badge-category">Code &amp; Refactoring</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">automation</span>
+    <span class="tag">prettier</span>
+    <span class="tag">eslint</span>
+    <span class="tag">formatting</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>31</strong> upvotes</span>
+    <span><strong>156</strong> downloads</span>
+    <span><strong>5</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>Automatically runs Prettier on any file Claude Code writes or edits. No more inconsistent formatting.</p>
+
+    <h3>Trigger</h3>
+    <p>PostToolUse — fires after the Write or Edit tool completes.</p>
+
+    <h3>Configuration</h3>
+<pre>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hook": "npx prettier --write \"$CLAUDE_FILE_PATH\""
+      }
+    ]
+  }
+}</pre>
+
+    <h3>How It Works</h3>
+    <ul>
+      <li>1. Claude Code writes or edits a file</li>
+      <li>2. The hook fires and runs Prettier on that specific file</li>
+      <li>3. The formatted result is what gets saved</li>
+      <li>4. Claude sees the formatted version on its next read</li>
+    </ul>
+    <p>This means you never have to say "format this" — it happens automatically every time Claude touches a file.</p>
+
+    <h3>Requirements</h3>
+    <ul>
+      <li>Prettier installed in your project: <code>npm install -D prettier</code></li>
+      <li>A .prettierrc config file (or Prettier defaults are fine)</li>
+      <li>Node.js 18+</li>
+    </ul>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>Multi-Agent Workflows with Claude Code</h2>
+    <div class="badges">
+      <span class="badge badge-guide">Guide</span>
+      <span class="badge badge-category">Code &amp; Refactoring</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">claude-code</span>
+    <span class="tag">multi-agent</span>
+    <span class="tag">workflow</span>
+    <span class="tag">tutorial</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>55</strong> upvotes</span>
+    <span><strong>14</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>How to run multiple Claude Code instances in parallel to ship features faster.</p>
+
+    <h3>Who This Is For</h3>
+    <p>Developers comfortable with Claude Code who want to parallelize their work. You should already know what skills, hooks, and CLAUDE.md files are.</p>
+
+    <h3>Why Multi-Agent?</h3>
+    <p>A single Claude Code session is fast. But some tasks have independent parts — frontend and backend, tests and implementation, docs and code. Running them in parallel cuts your total time significantly.</p>
+
+    <h3>The Pattern</h3>
+    <ul>
+      <li>1. Create a git branch for each task</li>
+      <li>2. Open separate terminals (or tmux panes)</li>
+      <li>3. Run Claude Code in each terminal on its own branch</li>
+      <li>4. Merge when both are done</li>
+    </ul>
+
+    <h3>Step 1: Set Up Branches</h3>
+<pre>git checkout -b feature/api-endpoints
+git checkout main
+git checkout -b feature/frontend-ui</pre>
+
+    <h3>Step 2: Run Claude Code in Parallel</h3>
+<pre># Terminal 1:
+cd my-project && git checkout feature/api-endpoints
+claude "Build the REST API endpoints for user profiles"
+
+# Terminal 2:
+cd my-project && git checkout feature/frontend-ui
+claude "Build the profile page UI with these components..."</pre>
+
+    <h3>Step 3: Merge</h3>
+<pre>git checkout main
+git merge feature/api-endpoints
+git merge feature/frontend-ui</pre>
+
+    <h3>Tips &amp; Gotchas</h3>
+    <ul>
+      <li>Give each instance a clear, scoped task. Don't let them overlap on the same files.</li>
+      <li>Use separate branches to avoid conflicts.</li>
+      <li>Each instance has its own context window — they don't share memory.</li>
+      <li>If you're on Claude Max, watch your rate limits. Two instances burn tokens 2x faster.</li>
+      <li>The <code>git worktree</code> approach is even cleaner — avoids checkout switching entirely.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PROMPT -->
+<div class="resource">
+  <div class="resource-header">
+    <h2>SQL Query Builder from Natural Language</h2>
+    <div class="badges">
+      <span class="badge badge-prompt">Prompt</span>
+      <span class="badge badge-category">Data &amp; Analytics</span>
+    </div>
+  </div>
+  <div class="tags">
+    <span class="tag">sql</span>
+    <span class="tag">database</span>
+    <span class="tag">analytics</span>
+    <span class="tag">prompt-engineering</span>
+  </div>
+  <div class="stats-bar">
+    <span><strong>28</strong> upvotes</span>
+    <span><strong>6</strong> comments</span>
+  </div>
+  <div class="resource-body">
+    <h3>Description</h3>
+    <p>A prompt pattern that turns plain English questions into optimized SQL queries for your specific database schema.</p>
+
+    <h3>When to Use</h3>
+    <p>When you need to query a database but don't want to write SQL by hand. Works best when Claude has access to your schema via MCP or CLAUDE.md.</p>
+
+    <h3>The Prompt</h3>
+<pre>I need a SQL query for my Postgres database.
+
+Schema context: [paste your table definitions or say "use the connected database"]
+
+Question: [your natural language question]
+
+Requirements:
+- Use explicit column names, no SELECT *
+- Add comments explaining non-obvious joins
+- Use CTEs for complex queries instead of nested subqueries
+- Include LIMIT if the result set could be large
+- Format the SQL for readability</pre>
+
+    <h3>Example Output</h3>
+    <p>Input: "Which users have posted the most resources in the last 30 days?"</p>
+<pre>-- Top contributors by resource count in last 30 days
+WITH recent_resources AS (
+  SELECT
+    author_id,
+    COUNT(*) as resource_count
+  FROM resources
+  WHERE created_at >= NOW() - INTERVAL '30 days'
+  GROUP BY author_id
+)
+SELECT
+  p.username,
+  p.display_name,
+  rr.resource_count
+FROM recent_resources rr
+JOIN profiles p ON p.id = rr.author_id
+ORDER BY rr.resource_count DESC
+LIMIT 20;</pre>
+
+    <h3>Variations</h3>
+    <ul>
+      <li>Add "explain the query" to get a plain English breakdown</li>
+      <li>Add "optimize for performance" to get index suggestions</li>
+      <li>Add "make it a migration" to get a CREATE VIEW or function instead</li>
+    </ul>
+  </div>
+</div>
+
+<div class="nav-hint">
+  These 6 resources represent the seed content for ClaudesHub.<br>
+  Each follows the structured template for its resource type.<br>
+  Multiply by 5–6 per type for the full 35 seed resources.
+</div>
+
+</div>
+</body>
+</html>

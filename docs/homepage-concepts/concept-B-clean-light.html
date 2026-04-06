@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Concept B: Clean Light</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --surface-2: #F3F3F0;
+    --fg: #1A1A18;
+    --muted: #7A7A72;
+    --border: #E5E5E0;
+    --accent: #2563EB;
+    --accent-light: #DBEAFE;
+    --accent-dark: #1D4ED8;
+    --warm: #DC6B20;
+    --green: #16A34A;
+  }
+
+  body { background: var(--bg); color: var(--fg); font-family: 'Instrument Sans', system-ui, sans-serif; line-height: 1.6; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,248,0.9);
+    backdrop-filter: blur(12px);
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 700; color: var(--fg); }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; font-size: 0.875rem; font-weight: 500; }
+  .nav-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-login { color: var(--muted); font-size: 0.875rem; text-decoration: none; }
+  .nav-login:hover { color: var(--fg); }
+  .nav-cta {
+    background: var(--accent); color: white; padding: 8px 18px; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 600; text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--accent-dark); }
+
+  /* HERO */
+  .hero { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
+  .hero .container { display: flex; align-items: center; gap: 60px; }
+  .hero-text { flex: 1; }
+  .hero h1 {
+    font-family: 'Fraunces', serif; font-size: 3.5rem; font-weight: 800;
+    line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); font-style: italic; }
+  .hero p { font-size: 1.1rem; color: var(--muted); max-width: 460px; margin-bottom: 28px; }
+  .hero-actions { display: flex; gap: 10px; }
+  .btn-primary {
+    background: var(--fg); color: white; padding: 14px 28px; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-ghost {
+    background: transparent; border: 1.5px solid var(--border); color: var(--fg);
+    padding: 14px 28px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  }
+  .btn-ghost:hover { border-color: var(--fg); }
+
+  .hero-visual {
+    width: 380px; height: 320px; flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .hero-visual-bar {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 6px;
+  }
+  .hero-visual-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .hero-visual-body { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); line-height: 1.8; flex: 1; }
+  .hero-visual-body .hl { color: var(--accent); }
+  .hero-visual-body .str { color: var(--green); }
+  .hero-visual-body .kw { color: var(--warm); }
+
+  /* STATS */
+  .stats { padding: 20px 0; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+  .stats .container { display: flex; justify-content: center; gap: 40px; font-size: 0.85rem; color: var(--muted); }
+  .stats strong { color: var(--fg); font-weight: 700; }
+
+  /* SECTIONS */
+  .section { padding: 60px 0; }
+  .section + .section { border-top: 1px solid var(--border); }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+  .section-title { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; }
+  .section-link { font-size: 0.8rem; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; text-decoration: none; color: inherit; display: block; transition: all 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-color: #ccc; }
+  .card-badges { display: flex; gap: 6px; margin-bottom: 10px; }
+  .badge {
+    font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+  }
+  .badge-skill { background: var(--accent-light); color: var(--accent); }
+  .badge-config { background: #FEF3C7; color: #B45309; }
+  .badge-mcp { background: #F3E8FF; color: #7C3AED; }
+  .badge-hook { background: #DCFCE7; color: #16A34A; }
+  .badge-guide { background: #FFEDD5; color: #C2410C; }
+  .badge-prompt { background: #FCE7F3; color: #BE185D; }
+  .badge-pick { background: #DCFCE7; color: #16A34A; }
+
+  .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .card-meta { display: flex; gap: 12px; margin-top: 12px; font-size: 0.7rem; color: var(--muted); }
+
+  /* DISCUSSIONS */
+  .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+  .disc-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .disc-item:last-child { border-bottom: none; }
+  .disc-votes {
+    font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--accent); min-width: 32px; text-align: center; padding-top: 2px;
+  }
+  .disc-title { font-size: 0.875rem; font-weight: 500; }
+  .disc-meta { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 32px 0; background: var(--surface-2); }
+  footer .container { display: flex; justify-content: space-between; align-items: center; }
+  footer .logo { font-size: 1rem; }
+  footer nav { display: flex; gap: 20px; font-size: 0.8rem; }
+  footer a { color: var(--muted); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <div class="nav-links">
+      <a href="#">Resources</a>
+      <a href="#">Discussions</a>
+      <a href="#">About</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="nav-login">Log in</a>
+      <a href="#" class="nav-cta">Sign up</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <h1>The community for Claude Code <span>builders</span></h1>
+      <p>Skills, configs, hooks, and MCP servers — discovered, shared, and refined by the community.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Browse Resources</a>
+        <a href="#" class="btn-ghost">Share Something</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-visual-bar">
+        <div class="hero-visual-dot"></div>
+        <div class="hero-visual-dot"></div>
+        <div class="hero-visual-dot"></div>
+      </div>
+      <div class="hero-visual-body">
+        <span class="kw">$</span> claude <span class="str">"generate commit message"</span><br><br>
+        <span class="hl">Analyzing staged changes...</span><br>
+        <span class="hl">Found 3 files modified</span><br><br>
+        <span class="kw">feat</span>(auth): add GitHub OAuth login<br><br>
+        <span class="str">Adds OAuth flow using Supabase Auth</span><br>
+        <span class="str">with GitHub provider. Includes callback</span><br>
+        <span class="str">handler and session middleware.</span><br><br>
+        <span class="hl">Committed ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <span><strong>248</strong> resources</span>
+    <span><strong>89</strong> contributors</span>
+    <span><strong>1.2k</strong> downloads</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Staff Picks</div>
+    </div>
+    <div class="card-grid">
+      <a href="#" class="card">
+        <div class="card-badges"><span class="badge badge-pick">Staff Pick</span><span class="badge badge-skill">Skill</span></div>
+        <h3>Auto-Generate Git Commit Messages</h3>
+        <p>Analyzes staged changes and writes conventional commit messages.</p>
+        <div class="card-meta"><span>47 upvotes</span><span>312 downloads</span></div>
+      </a>
+      <a href="#" class="card">
+        <div class="card-badges"><span class="badge badge-pick">Staff Pick</span><span class="badge badge-config">CLAUDE.md</span></div>
+        <h3>Next.js + TypeScript + Supabase Config</h3>
+        <p>Battle-tested project configuration for App Router projects.</p>
+        <div class="card-meta"><span>63 upvotes</span><span>489 downloads</span></div>
+      </a>
+      <a href="#" class="card">
+        <div class="card-badges"><span class="badge badge-pick">Staff Pick</span><span class="badge badge-mcp">MCP Server</span></div>
+        <h3>Supabase — Full Database Access</h3>
+        <p>Connect Claude directly to your Supabase project.</p>
+        <div class="card-meta"><span>89 upvotes</span><span>1,204 downloads</span></div>
+      </a>
+      <a href="#" class="card">
+        <div class="card-badges"><span class="badge badge-pick">Staff Pick</span><span class="badge badge-guide">Guide</span></div>
+        <h3>Multi-Agent Workflows</h3>
+        <p>Run multiple Claude Code instances in parallel.</p>
+        <div class="card-meta"><span>55 upvotes</span><span>14 comments</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <div class="section-title">Trending</div>
+          <a href="#" class="section-link">View all →</a>
+        </div>
+        <div class="card-grid" style="grid-template-columns: 1fr;">
+          <a href="#" class="card">
+            <div class="card-badges"><span class="badge badge-hook">Hook</span></div>
+            <h3>Auto-Format Files on Save</h3>
+            <p>Runs Prettier automatically every time Claude writes or edits a file.</p>
+            <div class="card-meta"><span>31 upvotes</span><span>156 downloads</span></div>
+          </a>
+          <a href="#" class="card">
+            <div class="card-badges"><span class="badge badge-prompt">Prompt</span></div>
+            <h3>SQL Query Builder from Natural Language</h3>
+            <p>Turn plain English into optimized PostgreSQL queries.</p>
+            <div class="card-meta"><span>28 upvotes</span><span>6 comments</span></div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <div class="section-title">Discussions</div>
+          <a href="#" class="section-link">View all →</a>
+        </div>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">34</div>
+          <div><div class="disc-title">What's your CLAUDE.md look like?</div><div class="disc-meta">12 comments</div></div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">28</div>
+          <div><div class="disc-title">Best MCP servers you use daily?</div><div class="disc-meta">19 comments</div></div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">21</div>
+          <div><div class="disc-title">Rate limit strategies — what works?</div><div class="disc-meta">8 comments</div></div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">19</div>
+          <div><div class="disc-title">Claude Code vs Cursor for frontend?</div><div class="disc-meta">24 comments</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <nav>
+      <a href="#">Resources</a>
+      <a href="#">Discussions</a>
+      <a href="#">About</a>
+      <a href="#">Guidelines</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

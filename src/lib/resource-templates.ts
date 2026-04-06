@@ -46,33 +46,55 @@ What parts should someone modify for their own project? Any sections that are op
 `,
 
   "mcp-server": `## Description
-What does this MCP server connect Claude Code to?
+What does this MCP server connect Claude Code to? One or two sentences.
 
-## What It Connects To
-The service, API, or system this server interfaces with.
-
-## Setup
-How to install and configure. Include the settings.json or .mcp.json snippet.
+## Config
+Paste the exact JSON config for settings.json or .mcp.json. This will be shown with a "Copy Config" button.
 
 \`\`\`json
 {
   "mcpServers": {
     "server-name": {
-      "command": "",
-      "args": []
+      "command": "npx",
+      "args": ["-y", "package-name"]
     }
   }
 }
 \`\`\`
 
+## Environment Variables
+List any required API keys or tokens:
+- \`SERVICE_API_KEY\` -- Get this from [service dashboard URL]
+- \`SERVICE_SECRET\` -- Optional, for advanced features
+
 ## Available Tools
-List the tools this server exposes and what each one does.
+List every tool this server exposes:
+- **tool_name** -- What it does
+- **another_tool** -- What it does
 
-## Example Usage
-Show example prompts that use this server's tools.
+## Token Usage
+Estimate how many tokens this server uses on initialization and per call:
+- **Init:** ~X,000 tokens (loaded when Claude Code starts)
+- **Per call:** ~X tokens per tool invocation
+- **Tip:** Any optimization advice
 
-## Requirements
-API keys, dependencies, or system requirements. Note any token usage considerations.
+## Setup Steps
+1. Install: \`npm install -g package-name\` (if needed)
+2. Get API key from [service]
+3. Add the config above to your settings.json
+4. Set environment variables
+5. Restart Claude Code
+
+## Example Prompts
+Show example prompts that use this server's tools:
+- "Query the users table for all active accounts"
+- "Send a message to #general channel"
+
+## Gotchas
+Things that tripped you up or that others should know:
+- Known issues
+- Platform-specific notes (Windows, Mac, Linux)
+- Version requirements
 `,
 
   hook: `## Description

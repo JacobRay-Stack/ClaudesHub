@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaudesHub — Concept I: DEV.to Inspired</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #F5F5F5;
+    --surface: #FFFFFF;
+    --fg: #171717;
+    --muted: #717171;
+    --border: #E5E5E5;
+    --accent: #3B49DF;
+    --accent-hover: #2F3AB2;
+    --accent-light: #EBEDFC;
+    --green: #059669;
+    --green-light: #ECFDF5;
+    --orange: #D97706;
+    --orange-light: #FFF7ED;
+    --purple: #7C3AED;
+    --purple-light: #F3E8FF;
+    --pink: #DB2777;
+    --pink-light: #FDF2F8;
+    --red: #DC2626;
+    --red-light: #FEF2F2;
+    --tag-bg: #F0F0F0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  a { color: var(--fg); text-decoration: none; }
+
+  /* ===== TOP NAV ===== */
+  .topnav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 56px;
+  }
+  .topnav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: 16px;
+  }
+  .logo {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+  .logo span { color: var(--accent); }
+
+  .search-bar {
+    flex: 1;
+    max-width: 420px;
+    position: relative;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: var(--bg);
+    color: var(--fg);
+    outline: none;
+  }
+  .search-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+  .search-bar svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .btn-outline {
+    padding: 8px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .btn-outline:hover { background: var(--accent); color: white; }
+  .btn-solid {
+    padding: 8px 16px;
+    background: var(--accent);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .btn-solid:hover { background: var(--accent-hover); }
+
+  /* ===== THREE COL LAYOUT ===== */
+  .layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 240px 1fr 320px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* ===== LEFT SIDEBAR ===== */
+  .sidebar-left { position: sticky; top: 72px; }
+
+  .sidebar-nav { margin-bottom: 24px; }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .sidebar-nav a:hover { background: var(--accent-light); color: var(--accent); }
+  .sidebar-nav a.active { background: var(--surface); color: var(--fg); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .sidebar-nav svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .sidebar-tags h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--fg);
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .sidebar-tags a {
+    display: block;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-radius: 6px;
+  }
+  .sidebar-tags a:hover { background: var(--tag-bg); color: var(--fg); }
+
+  /* ===== MAIN FEED ===== */
+  .feed {}
+
+  .feed-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .feed-tabs a {
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: var(--muted);
+  }
+  .feed-tabs a:hover { color: var(--fg); background: var(--surface); }
+  .feed-tabs a.active { color: var(--fg); font-weight: 700; }
+
+  /* ===== POST CARD ===== */
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .post-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+  .post-card-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-card-body { padding: 20px; }
+
+  .post-card-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .author-name { font-size: 0.8rem; font-weight: 500; }
+  .author-name:hover { color: var(--accent); }
+  .post-date { font-size: 0.75rem; color: var(--muted); }
+
+  .post-card h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .post-card h2 a:hover { color: var(--accent); }
+
+  .post-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .post-tag {
+    font-size: 0.75rem;
+    color: var(--muted);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+  }
+  .post-tag:hover { border-color: var(--border); background: var(--bg); }
+  .post-tag::before { content: '#'; opacity: 0.5; }
+
+  .post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .post-reactions {
+    display: flex;
+    gap: 6px;
+  }
+  .reaction-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+  .reaction-btn:hover { background: var(--bg); color: var(--fg); }
+  .reaction-btn .emoji { font-size: 1.1rem; }
+
+  .post-meta-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* TYPE BADGES */
+  .type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .tb-skill { background: var(--accent-light); color: var(--accent); }
+  .tb-config { background: var(--orange-light); color: var(--orange); }
+  .tb-mcp { background: var(--purple-light); color: var(--purple); }
+  .tb-hook { background: var(--green-light); color: var(--green); }
+  .tb-guide { background: var(--red-light); color: var(--red); }
+  .tb-prompt { background: var(--pink-light); color: var(--pink); }
+  .tb-pick { background: var(--green-light); color: var(--green); font-size: 0.6rem; }
+
+  /* ===== RIGHT SIDEBAR ===== */
+  .sidebar-right { position: sticky; top: 72px; }
+
+  .sidebar-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .sidebar-box-header {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-box-body { padding: 0; }
+
+  .disc-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .disc-item:last-child { border-bottom: none; }
+  .disc-item:hover { background: var(--bg); }
+
+  .disc-votes {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 24px;
+    text-align: center;
+    padding-top: 2px;
+  }
+  .disc-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .disc-title:hover { color: var(--accent); }
+  .disc-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+  /* CTA BOX */
+  .cta-box {
+    background: var(--accent);
+    color: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .cta-box h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+  .cta-box p { font-size: 0.8rem; opacity: 0.85; margin-bottom: 14px; }
+  .cta-box a {
+    display: inline-block;
+    background: white;
+    color: var(--accent);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  /* STATS ROW in sidebar */
+  .stats-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat-num { font-size: 1.1rem; font-weight: 800; color: var(--fg); }
+  .stat-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+  /* LISTING ITEM (compact) */
+  .listing-item {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .listing-item:last-child { border-bottom: none; }
+  .listing-item:hover { background: var(--bg); }
+  .listing-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 18px;
+    padding-top: 2px;
+  }
+  .listing-title { font-size: 0.8rem; font-weight: 500; line-height: 1.3; }
+  .listing-title:hover { color: var(--accent); }
+  .listing-meta { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="topnav-inner">
+    <div class="logo">Claudes<span>Hub</span></div>
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search skills, configs, MCP servers...">
+    </div>
+    <div class="nav-right">
+      <a href="#" class="btn-outline">Log in</a>
+      <a href="#" class="btn-solid">Create account</a>
+    </div>
+  </div>
+</header>
+
+<!-- THREE COL LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar-left">
+    <nav class="sidebar-nav">
+      <a href="#" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Discussions
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        About
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Guidelines
+      </a>
+    </nav>
+
+    <div class="sidebar-tags">
+      <h3>Popular Tags</h3>
+      <a href="#">claude-code</a>
+      <a href="#">mcp</a>
+      <a href="#">nextjs</a>
+      <a href="#">python</a>
+      <a href="#">git</a>
+      <a href="#">automation</a>
+      <a href="#">supabase</a>
+      <a href="#">typescript</a>
+      <a href="#">testing</a>
+      <a href="#">devops</a>
+    </div>
+  </aside>
+
+  <!-- MAIN FEED -->
+  <main class="feed">
+    <div class="feed-tabs">
+      <a href="#" class="active">Trending</a>
+      <a href="#">Latest</a>
+      <a href="#">Top</a>
+    </div>
+
+    <!-- Featured post with larger treatment -->
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar">JR</div>
+          <div>
+            <div class="author-name">jacobray</div>
+            <div class="post-date">Apr 4</div>
+          </div>
+        </div>
+        <h2><a href="#">Supabase MCP Server — Full Database Access for Claude Code</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">mcp</a>
+          <a href="#" class="post-tag">supabase</a>
+          <a href="#" class="post-tag">sql</a>
+          <a href="#" class="post-tag">database</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-pick">Staff Pick</span>
+          <span class="type-badge tb-mcp">MCP Server</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 89</button>
+            <button class="reaction-btn"><span class="emoji">🔥</span> 34</button>
+            <button class="reaction-btn"><span class="emoji">💡</span> 12</button>
+          </div>
+          <div class="post-meta-right">
+            <span>23 comments</span>
+            <span>1,204 downloads</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar" style="background:#FFF7ED;color:#D97706;">MK</div>
+          <div>
+            <div class="author-name">mikeclaude</div>
+            <div class="post-date">Apr 3</div>
+          </div>
+        </div>
+        <h2><a href="#">CLAUDE.md for Next.js + TypeScript + Supabase — The Config I Use on Every Project</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">nextjs</a>
+          <a href="#" class="post-tag">typescript</a>
+          <a href="#" class="post-tag">supabase</a>
+          <a href="#" class="post-tag">claude-code</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-pick">Staff Pick</span>
+          <span class="type-badge tb-config">CLAUDE.md</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 63</button>
+            <button class="reaction-btn"><span class="emoji">🔥</span> 21</button>
+          </div>
+          <div class="post-meta-right">
+            <span>12 comments</span>
+            <span>489 downloads</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar" style="background:#ECFDF5;color:#059669;">SL</div>
+          <div>
+            <div class="author-name">sarahliu</div>
+            <div class="post-date">Apr 2</div>
+          </div>
+        </div>
+        <h2><a href="#">Multi-Agent Workflows: Running Parallel Claude Code Instances with Git Worktrees</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">claude-code</a>
+          <a href="#" class="post-tag">workflow</a>
+          <a href="#" class="post-tag">multi-agent</a>
+          <a href="#" class="post-tag">git</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-guide">Guide</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 55</button>
+            <button class="reaction-btn"><span class="emoji">💡</span> 18</button>
+          </div>
+          <div class="post-meta-right">
+            <span>14 comments</span>
+            <span>4 min read</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar" style="background:#F3E8FF;color:#7C3AED;">AK</div>
+          <div>
+            <div class="author-name">amirkhan</div>
+            <div class="post-date">Apr 1</div>
+          </div>
+        </div>
+        <h2><a href="#">Auto-Generate Git Commit Messages — A Skill That Saves Me 5 Minutes Per Commit</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">git</a>
+          <a href="#" class="post-tag">automation</a>
+          <a href="#" class="post-tag">claude-code</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-pick">Staff Pick</span>
+          <span class="type-badge tb-skill">Skill</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 47</button>
+            <button class="reaction-btn"><span class="emoji">🔥</span> 15</button>
+          </div>
+          <div class="post-meta-right">
+            <span>8 comments</span>
+            <span>312 downloads</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar" style="background:#ECFDF5;color:#059669;">RN</div>
+          <div>
+            <div class="author-name">racheln</div>
+            <div class="post-date">Mar 31</div>
+          </div>
+        </div>
+        <h2><a href="#">Auto-Format Files on Save — The Hook Every Project Needs</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">automation</a>
+          <a href="#" class="post-tag">prettier</a>
+          <a href="#" class="post-tag">hooks</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-hook">Hook</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 31</button>
+          </div>
+          <div class="post-meta-right">
+            <span>5 comments</span>
+            <span>156 downloads</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-author">
+          <div class="avatar" style="background:#FDF2F8;color:#DB2777;">TC</div>
+          <div>
+            <div class="author-name">tomcheng</div>
+            <div class="post-date">Mar 30</div>
+          </div>
+        </div>
+        <h2><a href="#">SQL Query Builder from Natural Language — A Prompt That Replaced My SQL Cheat Sheet</a></h2>
+        <div class="post-tags">
+          <a href="#" class="post-tag">sql</a>
+          <a href="#" class="post-tag">database</a>
+          <a href="#" class="post-tag">prompt-engineering</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="type-badge tb-prompt">Prompt</span>
+        </div>
+        <div class="post-actions">
+          <div class="post-reactions">
+            <button class="reaction-btn"><span class="emoji">👍</span> 28</button>
+            <button class="reaction-btn"><span class="emoji">💡</span> 9</button>
+          </div>
+          <div class="post-meta-right">
+            <span>6 comments</span>
+            <span>2 min read</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="sidebar-right">
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h3>Share what you've built</h3>
+      <p>Skills, configs, hooks, MCP servers — if it helped you, it'll help someone else.</p>
+      <a href="#">Submit a Resource</a>
+    </div>
+
+    <!-- Community stats -->
+    <div class="sidebar-box">
+      <div class="stats-row">
+        <div><div class="stat-num">248</div><div class="stat-label">Resources</div></div>
+        <div><div class="stat-num">89</div><div class="stat-label">Contributors</div></div>
+        <div><div class="stat-num">1.2k</div><div class="stat-label">Downloads</div></div>
+      </div>
+    </div>
+
+    <!-- Discussions -->
+    <div class="sidebar-box">
+      <div class="sidebar-box-header">Active Discussions</div>
+      <div class="sidebar-box-body">
+        <a href="#" class="disc-item">
+          <div class="disc-votes">34</div>
+          <div>
+            <div class="disc-title">What's your CLAUDE.md look like?</div>
+            <div class="disc-meta">12 comments</div>
+          </div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">28</div>
+          <div>
+            <div class="disc-title">Best MCP servers you use daily?</div>
+            <div class="disc-meta">19 comments</div>
+          </div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">21</div>
+          <div>
+            <div class="disc-title">Rate limit strategies?</div>
+            <div class="disc-meta">8 comments</div>
+          </div>
+        </a>
+        <a href="#" class="disc-item">
+          <div class="disc-votes">19</div>
+          <div>
+            <div class="disc-title">Claude Code vs Cursor?</div>
+            <div class="disc-meta">24 comments</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Trending -->
+    <div class="sidebar-box">
+      <div class="sidebar-box-header">Trending This Week</div>
+      <div class="sidebar-box-body">
+        <div class="listing-item">
+          <div class="listing-num">01</div>
+          <div>
+            <div class="listing-title">GitHub MCP Server — Full Repo Access</div>
+            <div class="listing-meta">72 votes &middot; 890 downloads</div>
+          </div>
+        </div>
+        <div class="listing-item">
+          <div class="listing-num">02</div>
+          <div>
+            <div class="listing-title">PR Review Checklist Generator</div>
+            <div class="listing-meta">42 votes &middot; 198 downloads</div>
+          </div>
+        </div>
+        <div class="listing-item">
+          <div class="listing-num">03</div>
+          <div>
+            <div class="listing-title">API Documentation Generator</div>
+            <div class="listing-meta">38 votes &middot; 201 downloads</div>
+          </div>
+        </div>
+        <div class="listing-item">
+          <div class="listing-num">04</div>
+          <div>
+            <div class="listing-title">Block Dangerous Commands Hook</div>
+            <div class="listing-meta">29 votes &middot; 167 downloads</div>
+          </div>
+        </div>
+        <div class="listing-item">
+          <div class="listing-num">05</div>
+          <div>
+            <div class="listing-title">CLAUDE.md for Python ML Projects</div>
+            <div class="listing-meta">26 votes &middot; 143 downloads</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>

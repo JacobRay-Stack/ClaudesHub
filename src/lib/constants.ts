@@ -27,6 +27,13 @@ export const TYPE_ICONS: Record<ResourceType, string> = {
   prompt: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z", // chat bubble
 };
 
+export const DISCUSSION_TYPES = [
+  { value: "question", label: "Question", color: "bg-type-config/10 border-type-config/20 text-type-config" },
+  { value: "showcase", label: "Showcase", color: "bg-success/10 border-success/20 text-success" },
+  { value: "tips", label: "Tips", color: "bg-accent/10 border-accent/20 text-accent" },
+  { value: "meta", label: "Meta", color: "bg-card border-border text-muted" },
+] as const;
+
 export const SORT_OPTIONS = [
   { value: "hot", label: "Hot" },
   { value: "new", label: "New" },
